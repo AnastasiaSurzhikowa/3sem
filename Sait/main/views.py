@@ -6,3 +6,6 @@ def index(request):
 
 def about(request):
     return render(request,'main/about.html')
+
+def testpic(request):
+    return render(request, 'main/testpic.html')
