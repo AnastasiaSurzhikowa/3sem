@@ -1,0 +1,75 @@
+{% extends 'main/base.html' %}
+
+{% load static%}
+
+{% block content %}
+<!-- register -->
+<div class="register">
+    <span class="fas-fa-user-circle">
+        <img src="{% static 'main/img/Symbol2.svg' %}" alt="Регистрация">
+    </span>
+    <strong>Создать аккаунт</strong>
+    <form action="signin" method="post" class="register-form">
+        {% csrf_token %}
+        <fieldset>
+            <div class="form">
+                <div class="form-row">
+                    <span class="fas-fa-user">
+                        <img src="{% static 'main/img/person.svg' %}" alt="person">
+                    </span>
+                    <label class="form-label" for="{{ form.first_name.id_for_label}}">Имя</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="form-row">
+                    <span class="fas-fa-user">
+                        <img src="{% static 'main/img/person.svg' %}" alt="person">
+                    </span>
+                    <label class="form-label" for="{{ form.last_name.id_for_label}}">Фамилия</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="form-row">
+                    <span class="fas-fa-user">
+                        <img src="{% static 'main/img/person.svg' %}" alt="person">
+                    </span>
+                    <label class="form-label" for="{{ form.usermane.id_for_label}}">Имя пользователя</label>
+                    {{ form.username }}
+                </div>
+                <div class="form-row">
+                    <span class="fas-fa-envelope">
+                        <img src="{% static 'main/img/email.svg' %}" alt="email">
+                    </span>
+                    <label class="form-label" for="{{ form.email.id_for_label}}">E-mail</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-row">
+                    <span class="fas-fa-lock">
+                        <img src="{% static 'main/img/lock.svg' %}" alt="lock">
+                    </span>
+                    <label class="form-label" for="{{ form.password1.id_for_label}}">Пароль</label>
+                    {{ form.password1 }}
+                </div>
+                <div class="form-row">
+                    <span class="fas-fa-lock">
+                        <img src="{% static 'main/img/lock.svg' %}" alt="lock">
+                    </span>
+                    <label class="form-label" for="{{ form.password2.id_for_label}}">Подтвердите пароль</label>
+                    {{ form.password2 }}
+                </div>
+                <div class="form-row-button-login">
+                    <button class="btn-btn-login">Создать <span
+                            class="fas-fa-arrow-right">
+                        <img src="{% static 'main/img/SymbolB.svg' %}" alt="->"></span></button>
+                </div>
+            </div>
+        </fieldset>
+        </form>
+
+        <a class="forgot">Уже есть аккаунт? </a>   <!-- Вот это бы украсить -->
+        <a href="/" class="forgot">Войдите </a>
+
+        <span class="create-account"> <img class="img-suai" src="{% static 'main/img/suai.svg' %}" alt="suai">Планируйте дела, задачи, режим и распорядок дня.</span>
+</div>
+<!-- //register -->
+
+{% endblock %} 
+

@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+
+{% load static%}
+
+{% block content %}
+<!-- login -->
+<div class="login">
+    <span class="fas-fa-sign-in-alt">
+        <img src="{% static 'main/img/Symbol.svg' %}" alt="Вход">
+    </span>
+    <strong>Добро пожаловать!</strong>
+    <span>Войдите в ваш аккаунт</span>
+
+    <form action="" method="post" class="login-form">
+        {% csrf_token %}
+        <fieldset>
+            <div class="form">
+                
+            
+                <div class="form-row">
+                    <span class="fas-fa-user">
+                        <img src="{% static 'main/img/person.svg' %}" alt="person">
+                    </span>
+                    <label class="form-label" for="{{ form.usermane.id_for_label}}">Имя пользователя</label>
+                    {{ form.username }}
+                </div>
+
+                <div class="form-row">
+                    <span class="fas-fa-eye">
+                        <img src="{% static 'main/img/eye.svg' %}" alt="eye">
+                    </span>
+                    <label class="form-label" for={{ form.password.id_for_label}}>Пароль</label>
+                    {{ form.password }}
+                </div>
+
+                <div class="form-row-bottom">
+                    <div class="form-check">
+                        <input class="custom-checkbox" type="checkbox" id="remenber" name="remenber" value="remenber">
+                        <label for="remenber"> Запомнить меня</label>
+                    </div>
+                    <a href="#url" class="forgot">Забыли пароль?</a>
+                </div>
+                <div class="form-row-button-login">
+                    <button class="btn-btn-login">Войти <span
+                            class="fas-fa-arrow-right">
+                        <img src="{% static 'main/img/SymbolB.svg' %}" alt="->"></span></button>
+                    
+                </div>
+                
+            </div>
+        </fieldset>
+    </form>
+
+    <a class="forgot">Впервые тут?  </a>   <!-- Вот это бы украсить -->
+    <a href="signin" class="forgot">Зарегистрируйтесь </a>
+    
+    <span class="create-account"> <img class="img-suai" src="{% static 'main/img/suai.svg' %}" alt="suai">Планируйте дела, задачи, режим и распорядок дня.</span>
+</div>
+<!-- //login -->
+{% endblock %} 
+
