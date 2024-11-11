@@ -519,3 +519,34 @@ label {
     background-color: #e9ecef;
 }
 
+ /* Стили для окна */
+ .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Скрытие окна */
+.popup.hidden {
+    display: none;
+}
+
+/* Стиль кнопки закрытия */
+.close-btn {
+    margin-top: 10px;
+    padding: 15px 45px;
+    background-color: #4d61fc;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}

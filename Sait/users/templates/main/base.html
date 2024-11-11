@@ -1,7 +1,7 @@
 {% load static%}
 <!DOCTYPE html>
 <head>
-    <title>Вход</title>
+    <title>{% block title%}{% endblock %}</title>
 
     <!-- Meta tags -->
     <meta charset="UTF-8">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
 
 </head>
-
+ 
 <body>
 
 <meta name="robots" content="noindex">

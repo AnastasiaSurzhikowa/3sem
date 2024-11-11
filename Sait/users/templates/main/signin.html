@@ -2,6 +2,8 @@
 
 {% load static%}
 
+{% block title%}Регистрация{% endblock %}
+
 {% block content %}
 <!-- register -->
 <div class="register">
@@ -31,7 +33,14 @@
                     <span class="fas-fa-user">
                         <img src="{% static 'main/img/person.svg' %}" alt="person">
                     </span>
-                    <label class="form-label" for="{{ form.usermane.id_for_label}}">Имя пользователя</label>
+                    <label class="form-label" for="{{ form.group.id_for_label}}">Группа</label>
+                    {{ form.group}}
+                </div>
+                <div class="form-row">
+                    <span class="fas-fa-user">
+                        <img src="{% static 'main/img/person.svg' %}" alt="person">
+                    </span>
+                    <label class="form-label" for="{{ form.username.id_for_label}}">Имя пользователя</label>
                     {{ form.username }}
                 </div>
                 <div class="form-row">
@@ -68,6 +77,23 @@
         <a href="/" class="forgot">Войдите </a>
 
         <span class="create-account"> <img class="img-suai" src="{% static 'main/img/suai.svg' %}" alt="suai">Планируйте дела, задачи, режим и распорядок дня.</span>
+            {% if form.errors %}
+            <div class="popup" id="popup">
+                {% if massages %}
+                    {% for massage in massages %}
+                        {{ massage }}
+                    {% endfor %}
+                {% else %}
+                    {{ form.errors }}
+                {% endif %}
+                <button class="close-btn" onclick="closePopup()">Закрыть</button>
+            </div>
+            <script>
+                function closePopup() {
+                    document.getElementById('popup').classList.add('hidden');
+                }
+            </script>
+        {% endif %}
 </div>
 <!-- //register -->
 

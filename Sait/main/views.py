@@ -13,8 +13,5 @@ def calendar(request):
 def mainpage(request):
     return render(request, 'main/mainpage.html')
 
-def lk(request):
-    return render(request, 'main/lk.html')
-
 def contact(request):
     return render(request, 'main/contact.html')

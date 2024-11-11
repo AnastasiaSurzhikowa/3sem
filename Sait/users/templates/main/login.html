@@ -2,6 +2,8 @@
 
 {% load static%}
 
+{% block title%}Вход{% endblock %}
+
 {% block content %}
 <!-- login -->
 <div class="login">
@@ -15,8 +17,6 @@
         {% csrf_token %}
         <fieldset>
             <div class="form">
-                
-            
                 <div class="form-row">
                     <span class="fas-fa-user">
                         <img src="{% static 'main/img/person.svg' %}" alt="person">
@@ -40,6 +40,7 @@
                     </div>
                     <a href="#url" class="forgot">Забыли пароль?</a>
                 </div>
+                
                 <div class="form-row-button-login">
                     <button class="btn-btn-login">Войти <span
                             class="fas-fa-arrow-right">
@@ -55,6 +56,25 @@
     <a href="signin" class="forgot">Зарегистрируйтесь </a>
     
     <span class="create-account"> <img class="img-suai" src="{% static 'main/img/suai.svg' %}" alt="suai">Планируйте дела, задачи, режим и распорядок дня.</span>
+
+        {% if form.non_field_errors %}
+            <div class="popup" id="popup">
+                {% if massages %}
+                    {% for massage in massages %}
+                        {{ massage }}
+                    {% endfor %}
+                {% else %}
+                    {{ form.non_field_errors }}
+                {% endif %}
+                <button class="close-btn" onclick="closePopup()">Закрыть</button>
+            </div>
+            <script>
+                function closePopup() {
+                    document.getElementById('popup').classList.add('hidden');
+                }
+            </script>
+        {% endif %}
+
 </div>
 <!-- //login -->
 {% endblock %} 
