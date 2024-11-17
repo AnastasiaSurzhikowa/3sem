@@ -1,0 +1,122 @@
+{% load static%}
+
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <!--=============== REMIXICONS ===============-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
+
+      <!--=============== CSS ===============-->
+      <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+
+      <title>{% block title%}{% endblock %}</title>
+   </head>
+   <body>
+      <!--=============== HEADER ===============-->
+      <header class="header" id="header">
+         <div class="header__container">
+            <a href="#" class="header__logo">
+               <span>{{ user.group }}</span>
+            </a>
+            
+            <button class="header__toggle" id="header-toggle">
+               <i class="ri-menu-line"></i>
+            </button>
+            <img class="logo" src="{% static 'main/img/suai.svg' %}" alt="">
+         </div>
+      </header>
+
+      <!--=============== SIDEBAR ===============-->
+      <nav class="sidebar" id="sidebar">
+         <div class="sidebar__container">
+            <a href="profile" style="display: block;"> <div class="sidebar__user">
+               <div class="sidebar__img">
+                     <img src="{% if user.image %} {{user.image.url}} {% else %} {% static "main\img\defoult_avatar.svg" %} {% endif %}" alt="">
+               </div>
+   
+               <div class="sidebar__info" >
+                     <h3>{{ user.last_name }} {{ user.first_name }} </h3>
+                     <span>{{ user.email }}</span>
+               </div>
+            </div> </a>
+
+            <div class="sidebar__content">
+               <div>
+                  <div class="sidebar__list">
+                     
+                     <a href="calendar" class="sidebar__link active-link">
+                        <i class="ri-calendar-fill"></i>
+                        <span>Календарь</span>
+                     </a>
+                     
+                     <a href="#" class="sidebar__link">
+                        <i class="ri-task-fill"></i>
+                        <span>Задачи</span>
+                     </a>
+
+                     <a href="#" class="sidebar__link">
+                        <i class="ri-fire-fill"></i>
+                        <span>Дедлайны</span>
+                     </a>
+
+                     <a href="#" class="sidebar__link">
+                        <i class="ri-group-fill"></i>
+                        <span>Группа</span>
+                     </a>
+
+                     <a href="#" class="sidebar__link">
+                        <i class="ri-timer-2-fill"></i>
+                        <span>Встречи</span>
+                     </a>
+                  </div>
+               </div>
+
+               <div>
+                  <h3 class="sidebar__title"></h3>
+
+                  <div class="sidebar__list">
+                     <a href="contact" class="sidebar__link">
+                        <i class="ri-settings-3-fill"></i>
+                        <span>Контакты</span>
+                     </a>
+
+                     <a href="#" class="sidebar__link">
+                        <i class="ri-mail-unread-fill"></i>
+                        <span>Сообщения</span>
+                     </a>
+
+                     <a href="#" class="sidebar__link">
+                        <i class="ri-notification-2-fill"></i>
+                        <span>Уведомления</span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div class="sidebar__actions">
+               <button>
+                  <i class="ri-moon-clear-fill sidebar__link sidebar__theme" id="theme-button">
+                     <span>Тема</span>
+                  </i>
+               </button>
+
+               <a href="logout" style="display: block;"><button class="sidebar__link">
+                  <i class="ri-logout-box-r-fill"></i>
+                  <span>Выйти</span>
+               </button></a>
+            </div>
+         </div>
+      </nav>
+
+      <!--=============== MAIN ===============-->
+        {% block body%}
+        
+        {% endblock %}
+      
+      <!--=============== MAIN JS ===============-->
+      <script src="{% static 'main/js/main.js' %}"></script>
+   </body>
+</html>

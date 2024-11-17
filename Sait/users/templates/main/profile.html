@@ -1,7 +1,10 @@
-
+{% extends 'main/layout2.html'%}
 {% load static%}
 
-<div class="register">
+{% block title%}Profile{% endblock %}
+
+{% block body%}
+<main class="main container" >
     <span class="fas-fa-user-circle">
         <img src="{% static 'main/img/Symbol2.svg' %}" alt="Регистрация">
     </span>
@@ -71,4 +74,5 @@
         </form>
 
         <span > <img src="{% static 'main/img/suai.svg' %}" alt="suai"></span>
-</div>
+</main>
+{% endblock %}

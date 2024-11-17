@@ -1,11 +1,234 @@
-{% extends 'main/layout.html'%}
-
+{% extends 'main/layout2.html'%}
 {% load static%}
 
-{% block title%}Календарь{% endblock %}
+{% block title%}Calendar{% endblock %}
 
-{% block body%}    
-    <h1 style="margin-left: 300px;">Тут будет сам календарь, пока только пример</h1>
-    <img src="{% static 'main/img/testpic.png' %}" width="1424" height="801" />
+{% block body%}
+      <main class="main container" id="main">
+         <div class="day1">
+            <div class="day_header">
+                  <span class="day_of_week">Пн</span>
+                  <span class="day_data">11.11.24
+                  <button class="plus_goal" id="plus_goal">
+                     <i class="ri-add-circle-line"></i>
+                  </button>
+               </span>
+            </div>
+            <div class="lessons">
+                  <div class="lesson">
+                     <div class="lesson_header">
+                        <span class="time_lesson">16.40 - 18.10</span>
+                        <span class="type_lesson">Л</span>
+                     </div>
+                     <span class="name_lesson">Алгоритмы и структуры данных</span> 
+                  </div>
+                  <div class="lesson">
+                     <div class="lesson_header">
+                        <span class="time_lesson">18.30 - 20.00</span>
+                        <span class="type_lesson">Л</span>
+                     </div>
+                     <span class="name_lesson">Алгоритмы и структуры данных</span> 
+                  </div>
+            </div>
+            <div class="goal">
+               <hr>
+               <div class="plus_note">
+                  <button class="btn_plus_note" id="btn_plus_note">
+                     <i class="ri-sticky-note-add-line"></i>
+                  </button>
+               </div>
+            </div>
+         </div>
+         <div class="day2">
+            <div class="day_header">
+               <span class="day_of_week">Вт</span>
+               <span class="day_data">12.11.24
+               <button class="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">9.30 - 11.00</span>
+                     <span class="type_lesson">ПР</span>
+                  </div>
+                  <span class="name_lesson">Информационное право</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">11.10 - 12.40</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Теория вероятностей</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="btn_plus_note">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+         </div>
+         <div class="day3">
+            <div class="day_header">
+               <span class="day_of_week">Ср</span>
+               <span class="day_data">13.11.24
+               <button class="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">16.40 - 18.10</span>
+                     <span class="type_lesson">ПР</span>
+                  </div>
+                  <span class="name_lesson">Основы проектной деятельности</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">18.30 - 20.00</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Основы проектной деятельности</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="btn_plus_note">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+         </div>
+         <div class="day4">
+            <div class="day_header">
+               <span class="day_of_week">Чт</span>
+               <span class="day_data">14.11.24
+               <button class="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">11.10 - 12.40</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Теория вероятностей</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">13.00 - 14.30</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Основы программирования</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="btn_plus_note">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+         </div>
+         <div class="day5">
+            <div class="day_header">
+               <span class="day_of_week">Пт</span>
+               <span class="day_data">15.11.24
+               <button class="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">15.00 - 16.30</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Экономика</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">16.40 - 18.10</span>
+                     <span class="type_lesson">ПР</span>
+                  </div>
+                  <span class="name_lesson">Прикладная физическая культура</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="btn_plus_note">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+         </div>
+         <div class="day6">
+            <div class="day_header">
+               <span class="day_of_week">Сб</span>
+               <span class="day_data">16.11.24
+               <button class="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">9.30 - 11.00</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Компьютерная графика</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">11.10 - 12.40</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Компьютерная графика</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="btn_plus_note">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+         </div>
+         <div class="day7">
+            <div class="day_header">
+               <span class="day_of_week">Вс</span>
+               <span class="day_data">17.11.24
+               <button class="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">Сегодня пар нет!</span>
+                     <span class="calendar_check"><i class="ri-calendar-check-line"></i></span>
+                  </div>
+                  <span class="name_lesson">Можно спать спокойно!</span> 
+               </div>
+         </div>
+         <div class="goal">
+         </div>
+         </div>
+      </main>
 {% endblock %}
-
