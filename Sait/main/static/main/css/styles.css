@@ -206,6 +206,7 @@ body.dark-theme {
 
 .sidebar__info span {
   font-size: var(--smaller-font-size);
+  color:hsl(228, 12%, 61%);
 }
 
 .sidebar__content {
