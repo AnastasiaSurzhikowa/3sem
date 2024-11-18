@@ -40,7 +40,7 @@ class UserProfileForm(UserChangeForm):
     image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'proff' }), required=False)
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'proff', 'readonly': True }))
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'proff', 'readonly': True  }))
-    group = forms.CharField(widget=forms.TextInput(attrs={'class': 'proff' }))
+    group = forms.ChoiceField(choices=User.options, widget=forms.Select(attrs={'class': 'proff'}))
 
     
     class Meta:

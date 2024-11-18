@@ -19,7 +19,7 @@
       <header class="header" id="header">
          <div class="header__container">
             <a href="#" class="header__logo">
-               <span>{{ user.group }}</span>
+               <span>{% if user.group %} {{user.get_group_display}} {% else %} - {% endif %}</span>               
             </a>
             
             <button class="header__toggle" id="header-toggle">
