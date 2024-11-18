@@ -1,31 +1,13 @@
 {% extends 'main/layout2.html'%}
 {% load static%}
 
-{% block title%}Contacts{% endblock %}
+{% block title%}Пары{% endblock %}
 
 {% block body%} 
 <main class="main container" id="main">
-    <h1 style="margin-left: 300px;">Тут будут наши контакты, пока пустота</h1>
-    <div style="margin: 25px;">
-        <span style="margin-bottom: 10px; color: #ffffff;">Дрим тим - играй не хотим</span>
-        <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 20px">
-            <div class="about-div" >
-                <span class="about-span">Даниил Развеев aka Михалыч</span>
-                <p class="about-p">https://t.me/D_anissim0</p>
-            </div>
-            <div class="about-div" >
-                <span class="about-span">Таня Михайлова aka хейтер</span>
-                <p class="about-p">https://t.me/groshem</p>
-            </div>
-            <div class="about-div" >
-                <span class="about-span">Настя Суржикова aka жена хейтера</span>
-                <p class="about-p">https://t.me/luxinte_nebris</p>
-            </div>
-            <div class="about-div" >
-                <span class="about-span">Антон Смирнов aka саппорт на лайне, и танго угостит, и кларити зальет</span>
-                <p class="about-p">https://t.me/ascom8 (но тут только с подарком)</p>
-            </div>
-        </div>
+    <div>
+        <!-- Отобразим очищенное расписание -->
+        {{ schedule_html|safe }}
     </div>
 </main>
 {% endblock %}
