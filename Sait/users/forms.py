@@ -14,15 +14,9 @@ class UserLoginForm(AuthenticationForm):
         fields = ('username', 'password')
 
 class UserRegistrationForm(UserCreationForm):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-text' }))
-    last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-text' }))
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-text' }))
     email = forms.CharField(widget=forms.EmailInput(attrs={
-        'class': 'form-text' }))
-    group = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-text' }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-text' }))
@@ -31,7 +25,7 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'group', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
 
 class UserProfileForm(UserChangeForm):

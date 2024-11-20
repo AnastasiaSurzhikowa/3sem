@@ -5,10 +5,6 @@
 
 {% block body%}
 <main class="main container" >
-    <span class="fas-fa-user-circle">
-        <img src="{% static 'main/img/Symbol2.svg' %}" alt="Регистрация">
-    </span>
-    <strong>Личный кабинет</strong>
     <form action="profile" method="post" enctype = "multipart/form-data">
         {% csrf_token %}
         <fieldset>
@@ -62,17 +58,8 @@
                     <div class="safe">
                             <input type='submit' value ='Сохранить'>
                     </div>
-                
-                <button>
-                    <a href="calendar" style="text-decoration: none; color: #000; font-size: large;">Календарь</a>
-                </button>
-                <button>
-                    <a href="logout" style="text-decoration: none; color: #000; font-size: large;">Log out</a>
-                </button>
             </div>
         </fieldset>
         </form>
-
-        <span > <img src="{% static 'main/img/suai.svg' %}" alt="suai"></span>
 </main>
 {% endblock %}
