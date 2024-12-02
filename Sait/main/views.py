@@ -17,6 +17,9 @@ def mainpage(request):
 def contact(request):
     return render(request, 'main/about.html')
 
+def deadline(request):
+    return render(request, 'main/deadline.html')
+
 def schedule_view(request):
     group_value = "317"
     group_value1 = "12312"  # Инициализация переменной по умолчанию

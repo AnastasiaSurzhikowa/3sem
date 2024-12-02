@@ -9,5 +9,6 @@ urlpatterns = [
     path('testpic', views.testpic),
     path('calendar', views.calendar),
     path('mainpage', views.mainpage),
-    path('contact', views.contact)
+    path('contact', views.contact),
+    path('deadline', views.deadline)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,59 +4,66 @@
 {% block title%}Profile{% endblock %}
 
 {% block body%}
-<main class="main container" >
+<main class="main container" id="main" >
     <form action="profile" method="post" enctype = "multipart/form-data">
         {% csrf_token %}
         <fieldset>
-            <div class="form">
-                <div>
-                    <img width ="100" height ="100"
-                        src = "{% if user.image %} {{user.image.url}} {% else %} {% static "main\img\defoult_avatar.svg" %} {% endif %}">
+            
+            <div class="form_edit_profile">
+                <div class="info_h3">
+                    <h3 class="h3_info_css">Личные данные</h3>
                 </div>
-                <div>
-                    <span>
-                        <img src="{% static 'main/img/person.svg' %}" alt="person">
-                    </span>
-                    <label class="proff" for="{{ form.image.id_for_label}}">Аватар</label>
-                    {{ form.image }}
-                </div> 
-                <div>
-                    <span>
-                        <img src="{% static 'main/img/person.svg' %}" alt="person">
-                    </span>
-                    <label class="proff" for="{{ form.first_name.id_for_label}}">Имя</label>
-                    {{ form.first_name }}
-                </div>    
-                <div>
-                    <span>
-                        <img src="{% static 'main/img/person.svg' %}" alt="person">
-                    </span>
-                    <label class="proff" for="{{ form.last_name.id_for_label}}">Фамилия</label>
-                    {{ form.last_name }}
-                </div> 
-                <div>
-                    <span>
-                        <img src="{% static 'main/img/person.svg' %}" alt="person">
-                    </span>
-                    <label class="proff" for="{{ form.group.id_for_label}}">Группа</label>
-                    {{ form.group }}
-                </div>
-                <div>
-                    <span>
-                        <img src="{% static 'main/img/person.svg' %}" alt="person">
-                    </span>
-                    <label class="proff" for="{{ form.username.id_for_label}}">Имя Пользователя</label>
-                    {{ form.username }}
-                </div>
-                <div>
-                    <span>
-                        <img src="{% static 'main/img/email.svg' %}" alt="email">
-                    </span>
-                    <label class="proff" for="{{ form.email.id_for_label}}">E-mail</label>
-                    {{ form.email }}
-                </div> 
-                    <div class="safe">
-                            <input type='submit' value ='Сохранить'>
+                <div class="info_and_photo">
+                    <div class="photo_profile">
+                        <img class="photo_profile_img"
+                            src = "{% if user.image %} {{user.image.url}} {% else %} {% static "main\img\defoult_avatar.svg" %} {% endif %}">
+                    </div>
+                    <div class="edit_info_profile">
+                        <div>
+                        <!--  <span>
+                                <img src="{% static 'main/img/person.svg' %}" alt="person">
+                            </span> -->
+                            <label class="proff" for="{{ form.image.id_for_label}}"></label>
+                            {{ form.image }}
+                        </div> 
+                        <div>
+                            <!-- <span>
+                                <img src="{% static 'main/img/person.svg' %}" alt="person">
+                            </span> -->
+                            <label class="proff" for="{{ form.first_name.id_for_label}}">Имя</label>
+                            {{ form.first_name }}
+                        </div>    
+                        <div>
+                            <!-- <span>
+                                <img src="{% static 'main/img/person.svg' %}" alt="person">
+                            </span> -->
+                            <label class="proff" for="{{ form.last_name.id_for_label}}">Фамилия</label>
+                            {{ form.last_name }}
+                        </div> 
+                        <div>
+                            <!-- <span>
+                                <img src="{% static 'main/img/person.svg' %}" alt="person">
+                            </span> -->
+                            <label class="proff" for="{{ form.group.id_for_label}}">Группа</label>
+                            {{ form.group }}
+                        </div>
+                        <div>
+                            <!-- <span>
+                                <img src="{% static 'main/img/person.svg' %}" alt="person">
+                            </span> -->
+                            <label class="proff" for="{{ form.username.id_for_label}}">Имя пользователя
+                            </label>
+                            {{ form.username }}
+                        </div>
+                        <div>
+                            
+                            <label class="proff" for="{{ form.email.id_for_label}}">E-mail</label>
+                            {{ form.email }}
+                        </div> 
+                            <div class="safe">
+                                    <input type='submit' value ='Сохранить'>
+                            </div>
+                        </div>
                     </div>
             </div>
         </fieldset>
