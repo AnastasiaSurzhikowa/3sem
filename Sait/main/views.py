@@ -20,6 +20,9 @@ def contact(request):
 def deadline(request):
     return render(request, 'main/deadline.html')
 
+def calendar2(request):
+    return render(request, 'main/calendar2.html')
+
 def schedule_view(request):
     group_value = "317"
     group_value1 = "12312"  # Инициализация переменной по умолчанию

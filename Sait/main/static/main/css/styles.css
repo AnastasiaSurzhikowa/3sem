@@ -310,19 +310,21 @@ body.dark-theme {
 .calendar_main {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: repeat(3, 300px);
+  grid-template-rows: /* repeat(3, 300px) */ auto auto auto;
   row-gap: 20px;
   column-gap: 20px;
 }
 
 .day1 {
   border-radius: 30px;
+  /* display: table; */
   /* background-color: var(--lesson-color); */
   box-shadow: 0 2px 24px var(--shadow-color);
   padding: 20px 10px 10px 15px;
   position: relative;
   display: grid;  
   grid-template-rows: 1fr auto;
+  height: fit-content;
 }
 
 .day_header {
@@ -348,7 +350,7 @@ body.dark-theme {
   display: grid;
   grid-auto-flow: row;
   gap: 10px;
-  margin-bottom: 7vh;
+  margin-bottom: 2vh;
 }
 
 .lesson {
@@ -396,6 +398,7 @@ body.dark-theme {
   position: relative;
   display: grid;  
   grid-template-rows: 1fr auto;
+  height: fit-content;
 }
 
 .day3 {
@@ -406,6 +409,7 @@ body.dark-theme {
   position: relative;
   display: grid;  
   grid-template-rows: 1fr auto;
+  height: fit-content;
 }
 
 .day4 {
@@ -416,6 +420,7 @@ body.dark-theme {
   position: relative;
   display: grid;  
   grid-template-rows: 1fr auto;
+  height: fit-content;
 }
 
 .day5 {
@@ -426,6 +431,7 @@ body.dark-theme {
   position: relative;
   display: grid;  
   grid-template-rows: 1fr auto;
+  height: fit-content;
 }
 
 .day6 {
@@ -436,6 +442,7 @@ body.dark-theme {
   position: relative;
   display: grid;  
   grid-template-rows: 1fr auto;
+  height: fit-content;
 }
 
 .day7 {
@@ -446,11 +453,124 @@ body.dark-theme {
   position: relative;
   /* display: grid;  
   grid-template-rows: 1fr auto; */
+  height: fit-content;
 }
 
 .calendar_check {
   text-align: right;
 }
+/* ----------------pop button------------------------- */
+
+.navigation {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.section__title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section__button {
+  background-color: hsl(233, 16%, 55%);
+  border: 2px solid white;
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  border-radius: 15px;
+}
+
+.section__button:hover {
+  background-color: #a096a7;
+  color: #000;
+}
+
+.section__button:focus-visible {
+  outline-color: yellow;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  padding: 30px;
+  overflow-y: auto;
+  display: none;
+}
+
+.modal__main {
+  position: relative;
+  max-width: 700px;
+  min-width: 500px;
+  background-color: #fff;
+  margin: auto;
+  color: #000;
+  border-radius: 16px;
+  padding: 30px 60px 60px;
+  cursor: default;
+}
+
+.modal__title {
+  font-size: 20px;
+  margin-bottom: 30px;
+
+}
+
+.modal__container {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.modal__btn {
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+  font-size: 20px;
+  text-align: center;
+  display: block;
+  margin: 0 auto; 
+  border-radius: 20px;
+  border: none;
+  padding: 15px 30px;
+}
+
+.modal__close {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  outline: 1px solid transparent;
+  outline-offset: 3px;
+  transition: outline-color .15s ease-in-out;
+  border-radius: 3px;
+  padding: 0;
+  text-align: center;
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.modal__close:focus-visible {
+  outline-color: green;
+}
+
+/*=============== CALENDAR ===============*/
 
 fieldset {
   color: #585858;

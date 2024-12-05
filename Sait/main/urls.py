@@ -10,5 +10,6 @@ urlpatterns = [
     path('calendar', views.calendar),
     path('mainpage', views.mainpage),
     path('contact', views.contact),
-    path('deadline', views.deadline)
+    path('deadline', views.deadline),
+    path('calendar2', views.calendar2)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
