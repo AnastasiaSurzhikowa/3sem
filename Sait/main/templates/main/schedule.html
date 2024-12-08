@@ -1,0 +1,105 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block body %}
+  <div class="container">
+    <h1>Расписание</h1>
+
+    <!-- Кнопки для переключения между неделями -->
+    <div class="week-navigation">
+      <button id="prev-week">Предыдущая неделя</button>
+      <button id="next-week">Следующая неделя</button>
+    </div>
+
+    <!-- Информация о чётности недели -->
+    <p id="week-parity-info">
+      {% if offset|add:1|divisibleby:2 %}
+        Чётная неделя
+      {% else %}
+        Нечётная неделя
+      {% endif %}
+    </p>
+
+    <!-- Кнопка для открытия модального окна "Добавить пару" -->
+    <button id="add-lesson-btn" class="btn btn-primary">Добавить пару</button>
+
+    <!-- Контейнер для расписания -->
+    <div class="schedule">
+      {% for day_name, lessons in lessons_by_day.items %}
+        <div class="day">
+          <h3>{{ day_name }}</h3>
+          <ul>
+            {% if lessons %}
+              {% for lesson in lessons %}
+                <li>
+                  <p><strong>{{ lesson.subject }}</strong></p>
+                  <p>{{ lesson.room }}</p>
+                  <p>{{ lesson.start_time }} - {{ lesson.end_time }}</p>
+                  <p>{{ lesson.get_lesson_type_display }}</p>
+                  <button class="delete-btn" data-id="{{ lesson.id }}">Удалить</button>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li>Нет пар на этот день.</li>
+            {% endif %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Модальное окно для добавления пары -->
+    <div id="add-lesson-modal" class="modal hidden">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+
+        <h2>Добавить пару</h2>
+        <form id="add-lesson-form" method="POST" action="/schedule/add/">
+          {% csrf_token %}
+
+          <!-- День недели -->
+          <label for="day">День недели:</label>
+          <select name="day" id="day" required>
+            <option value="ПН">Понедельник</option>
+            <option value="ВТ">Вторник</option>
+            <option value="СР">Среда</option>
+            <option value="ЧТ">Четверг</option>
+            <option value="ПТ">Пятница</option>
+            <option value="СБ">Суббота</option>
+            <option value="ВС">Воскресенье</option>
+          </select>
+
+          <!-- Название предмета -->
+          <label for="subject">Название предмета:</label>
+          <input type="text" id="subject" name="subject" required>
+
+          <!-- Аудитория -->
+          <label for="room">Аудитория:</label>
+          <input type="text" id="room" name="room" required>
+
+          <!-- Время начала -->
+          <label for="start_time">Время начала:</label>
+          <input type="time" id="start_time" name="start_time" required>
+
+          <!-- Время окончания -->
+          <label for="end_time">Время окончания:</label>
+          <input type="time" id="end_time" name="end_time" required>
+
+          <!-- Тип занятия -->
+          <label for="lesson_type">Тип занятия:</label>
+          <select name="lesson_type" id="lesson_type" required>
+            <option value="Л">Лекция</option>
+            <option value="ПР">Практическое занятие</option>
+            <option value="ЛР">Лабораторное занятие</option>
+            <option value="КП">Курсовой проект</option>
+            <option value="КР">Курсовая работа</option>
+          </select>
+
+          <!-- Кнопка для добавления пары -->
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'main/js/schedule.js' %}"></script>
+{% endblock %}
