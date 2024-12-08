@@ -1,7 +1,8 @@
-{% extends "main/layout.html" %}
+{% extends "main/layout2.html" %}
 {% load static %}
 
 {% block body %}
+<main class="main container" id="main">
   <div class="container">
     <h1>Расписание</h1>
 
@@ -11,6 +12,9 @@
       <button id="next-week">Следующая неделя</button>
     </div>
 
+    <!-- Кнопка для парсинга расписания -->
+    <button id="parse-schedule-btn" class="btn btn-primary">Парсить расписание</button>
+    
     <!-- Информация о чётности недели -->
     <p id="week-parity-info">
       {% if offset|add:1|divisibleby:2 %}
@@ -48,9 +52,10 @@
     </div>
 
     <!-- Модальное окно для добавления пары -->
-    <div id="add-lesson-modal" class="modal hidden">
+    <div id="add-lesson-modal" class="modal">
       <div class="modal-content">
         <span id="close-modal" class="close">&times;</span>
+        
 
         <h2>Добавить пару</h2>
         <form id="add-lesson-form" method="POST" action="/schedule/add/">
@@ -100,6 +105,6 @@
       </div>
     </div>
   </div>
-
+</main>
   <script src="{% static 'main/js/schedule.js' %}"></script>
 {% endblock %}

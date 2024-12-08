@@ -1,4 +1,3 @@
-// schedule.js
 document.addEventListener('DOMContentLoaded', () => {
     const prevWeekButton = document.getElementById('prev-week');
     const nextWeekButton = document.getElementById('next-week');
@@ -50,29 +49,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const addLessonButton = document.getElementById('add-lesson-btn');
     const modal = document.getElementById('add-lesson-modal');
     const closeModalButton = document.getElementById('close-modal');
-
-    addLessonButton.addEventListener('click', () => {
-        modal.classList.remove('hidden');
-    });
-
-    closeModalButton.addEventListener('click', () => {
-        modal.classList.add('hidden');
-    });
-
+    
+    // Проверим, существует ли кнопка
+    if (addLessonButton) {
+        addLessonButton.addEventListener('click', () => {
+            console.log('Кнопка нажата');
+            modal.classList.add('show');
+        });
+    }
+    
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', () => {
+            console.log('Закрыть модальное окно');
+            modal.classList.remove('show');
+        });
+    }
+    
     // Закрытие модального окна при клике вне его
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.classList.add('hidden');
+            modal.classList.remove('show');
         }
     });
-
+    
     // Обработка формы добавления пары
     const addLessonForm = document.getElementById('add-lesson-form');
     addLessonForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
+        e.preventDefault();  // Не даем странице перезагрузиться
+    
         const formData = new FormData(addLessonForm);
-
+    
         try {
             const response = await fetch('/schedule/add/', {
                 method: 'POST',
@@ -81,9 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 }
             });
-
+    
             if (response.ok) {
-                window.location.reload(); // Перезагрузка после успешного добавления
+                console.log('Пара добавлена');
+                window.location.reload();  // Перезагрузка страницы после успешного добавления
             } else {
                 alert('Ошибка при добавлении пары.');
             }
@@ -92,4 +99,31 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Произошла ошибка при добавлении.');
         }
     });
+
+    // Парсинг расписания с сайта
+    const parseScheduleButton = document.getElementById('parse-schedule-btn');
+    if (parseScheduleButton) {
+        parseScheduleButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/schedule/parse/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Расписание успешно загружено!');
+                    console.log(data.lessons);  // Выводим информацию о загруженных парах в консоль
+                } else {
+                    alert('Ошибка при загрузке расписания.');
+                    console.error(data.error);
+                }
+            } catch (error) {
+                console.error('Ошибка сети:', error);
+                alert('Произошла ошибка при парсинге расписания.');
+            }
+        });
+    }
 });

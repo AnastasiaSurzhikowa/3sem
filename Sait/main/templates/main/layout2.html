@@ -47,7 +47,7 @@
                <div>
                   <div class="sidebar__list">
                      
-                     <a href="calendar" class="sidebar__link active-link">
+                     <a href="{% url 'view_calendar' %}" class="sidebar__link active-link">
                         <i class="ri-calendar-fill"></i>
                         <span>Календарь</span>
                      </a>
@@ -57,7 +57,7 @@
                         <span>Рассписание</span>
                      </a>
 
-                     <a href="deadline" class="sidebar__link">
+                     <a href="{% url 'view_deadline' %}" class="sidebar__link">
                         <i class="ri-fire-fill"></i>
                         <span>Дедлайны</span>
                      </a>
@@ -67,7 +67,7 @@
                         <span>Группа</span>
                      </a>
 
-                     <a href="calendar2" class="sidebar__link">
+                     <a href="{% url 'view_calendar2' %}" class="sidebar__link">
                         <i class="ri-timer-2-fill"></i>
                         <span>старый календарь</span>
                      </a>
@@ -78,7 +78,7 @@
                   <h3 class="sidebar__title"></h3>
 
                   <div class="sidebar__list">
-                     <a href="contact" class="sidebar__link">
+                     <a href="{% url 'view_contact' %}" class="sidebar__link">
                         <i class="ri-settings-3-fill"></i>
                         <span>Пробная версия расписания</span>
                      </a>
@@ -103,7 +103,7 @@
                   </i>
                </button>
 
-               <a href="logout" style="display: block;"><button class="sidebar__link">
+               <a href="{% url 'logout' %}" style="display: block;"><button class="sidebar__link">
                   <i class="ri-logout-box-r-fill"></i>
                   <span>Выйти</span>
                </button></a>

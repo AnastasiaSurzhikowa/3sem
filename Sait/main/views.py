@@ -3,6 +3,9 @@ from datetime import date, timedelta
 from django.http import JsonResponse
 from .models import Lesson
 
+import requests
+from bs4 import BeautifulSoup
+
 
 def about(request):
     return render(request, 'main/about.html')
@@ -96,6 +99,58 @@ def add_lesson(request):
 def delete_lesson(request, lesson_id):
     Lesson.objects.filter(id=lesson_id).delete()
     return JsonResponse({'success': True})
+
+def parse_schedule(request):
+    if request.method == 'POST':
+        url = 'https://guap.ru/rasp/?g=319'
+        response = requests.get(url)
+
+        if response.status_code != 200:
+            return JsonResponse({'error': 'Не удалось загрузить страницу'}, status=500)
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Примерный процесс извлечения данных
+        lessons = []
+        
+        # Пожалуйста, уточните структуру HTML и измените эти селекторы
+        rows = soup.find_all('tr', {'class': 'lesson-row'})  # Это пример, возможно, вам нужно будет изменить селектор
+        for row in rows:
+            day = row.find('td', {'class': 'day'}).text.strip()  # Пример, адаптируйте селекторы под структуру сайта
+            subject = row.find('td', {'class': 'subject'}).text.strip()
+            room = row.find('td', {'class': 'room'}).text.strip()
+            start_time = row.find('td', {'class': 'start-time'}).text.strip()
+            end_time = row.find('td', {'class': 'end-time'}).text.strip()
+            lesson_type = row.find('td', {'class': 'lesson-type'}).text.strip()
+
+            # Преобразуем день в код, например: 'Понедельник' -> 'ПН'
+            day_map = {
+                'Понедельник': 'ПН',
+                'Вторник': 'ВТ',
+                'Среда': 'СР',
+                'Четверг': 'ЧТ',
+                'Пятница': 'ПТ',
+                'Суббота': 'СБ',
+                'Воскресенье': 'ВС',
+            }
+            # Также стоит проверить, какой тип недели (четная/нечетная)
+            week_parity = True  # Это нужно определять на основе текущей недели или информации на сайте
+
+            # Сохраняем данные в базу
+            lesson = Lesson.objects.create(
+                day=day_map.get(day, 'ПН'),  # Если день не найден, по умолчанию - Понедельник
+                week_parity=week_parity,  # Здесь предполагается, что все пары принадлежат одной неделе
+                subject=subject,
+                room=room,
+                start_time=start_time,
+                end_time=end_time,
+                lesson_type=lesson_type
+            )
+            lessons.append(lesson)
+
+        return JsonResponse({'message': 'Парсинг завершён успешно', 'lessons': [str(lesson) for lesson in lessons]})
+    else:
+        return JsonResponse({'error': 'Неверный метод запроса'}, status=400)
 
 
 
