@@ -9,5 +9,5 @@ urlpatterns = [
     path('signin', views.signin),
     path('', include('main.urls')),
     path('profile', views.profile, name = 'view_profile'),
-    path('logout', views.logout, name = 'logout')
+    path('logout/', views.logout, name = 'logout')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
