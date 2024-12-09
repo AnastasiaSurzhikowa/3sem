@@ -32,3 +32,26 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.subject} ({self.lesson_type}) - {self.day}"
+
+class Task(models.Model):
+    DAY_CHOICES = [
+        ('ПН', 'Понедельник'),
+        ('ВТ', 'Вторник'),
+        ('СР', 'Среда'),
+        ('ЧТ', 'Четверг'),
+        ('ПТ', 'Пятница'),
+        ('СБ', 'Суббота'),
+        ('ВС', 'Воскресенье'),
+    ]
+
+    day = models.CharField(max_length=2, choices=DAY_CHOICES)
+    week_parity = models.BooleanField(default=True)  # True = четная неделя, False = нечетная
+    subject = models.CharField(max_length=255)
+    descriptions = models.CharField(max_length=511)
+    start_time = models.TimeField()
+
+    class Meta:
+        ordering = ['start_time']
+
+    def __str__(self):
+        return f"{self.subject} - {self.day}"

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from datetime import date, timedelta, time
 from django.http import JsonResponse
-from .models import Lesson
+from .models import Lesson, Task
 
 import requests
 from bs4 import BeautifulSoup
@@ -101,6 +101,78 @@ def add_lesson(request):
 def delete_lesson(request, lesson_id):
     Lesson.objects.filter(id=lesson_id).delete()
     return JsonResponse({'success': True})
+
+#Задания
+
+def task_view(request, offset="0"):
+    try:
+        offset = int(offset)
+    except ValueError:
+        offset = 0
+
+    today = date.today()  # Текущая дата
+    start_of_week = today + timedelta(weeks=offset)  # Дата начала недели
+    week_number = start_of_week.isocalendar()[1]  # Номер недели
+    parity = (week_number % 2 == 0)  # Четность недели
+
+    # Список дней недели с датами
+    days = [
+        {
+            'date': start_of_week + timedelta(days=i),
+            'day_name': day
+        }
+        for i, day in enumerate(['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'])
+    ]
+
+    tasks = Task.objects.filter(week_parity=parity).order_by('day', 'start_time')
+
+    # Сортируем уроки по дням недели
+    tasks_by_day = {day['day_name']: [] for day in days}
+    for task in tasks:
+        tasks_by_day[task.day].append(task)
+
+    context = {
+        'days': days,  # Список дней с датами
+        'tasks_by_day': tasks_by_day,
+        'offset': offset,
+        'parity': 'Чётная' if parity else 'Нечётная',
+    }
+
+    return render(request, 'main/schedule.html', context)
+
+
+
+def add_task(request):
+    if request.method == 'POST':
+        # Получение данных из запроса
+        subject = request.POST.get('subject')
+        descriptions = request.POST.get('descriptions')
+        start_time = request.POST.get('start_time')
+        task_type = request.POST.get('lesson_type')
+        day = request.POST.get('day')
+        week_parity = request.POST.get('week_parity') == 'true'  # Преобразование строки в boolean
+
+        # Создание урока
+        task = Lesson.objects.create(
+            subject=subject,
+            descriptions=descriptions,
+            start_time=start_time,
+            task_type=task_type,
+            day=day,
+            week_parity=week_parity
+        )
+
+        # Возврат JSON-ответа для AJAX-запросов
+        return JsonResponse({'success': True, 'task_id': task.id})
+
+    # Если метод GET — можно вернуть страницу добавления или редирект
+    return redirect('schedule')
+
+def delete_task(request, task_id):
+    Task.objects.filter(id=task_id).delete()
+    return JsonResponse({'success': True})
+
+#парсинг
 
 URL = "https://guap.ru/rasp/?g=319"
 

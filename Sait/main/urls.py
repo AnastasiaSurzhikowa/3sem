@@ -17,4 +17,10 @@ urlpatterns = [
     path('schedule/add/', views.add_lesson, name='add_lesson'),
     path('schedule/delete/<int:lesson_id>/', views.delete_lesson, name='delete_lesson'),
     path('schedule/parse/', views.parse_schedule, name='parse_schedule'),
+
+    path('tasks/', views.task_view, {'offset': 0}, name='tasks'),
+    re_path(r'^task/(?P<offset>-?\d+)/$', views.task_view, name='tasks_offset'),
+    path('tasks/add/', views.add_task, name='add_task'),
+    path('tasks/delete/<int:task_id>/', views.delete_task, name='delete_task'),
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

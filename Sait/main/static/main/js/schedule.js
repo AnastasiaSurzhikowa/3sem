@@ -43,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
     });
+    
 
     // Открытие модального окна
     const addLessonButton = document.getElementById('add-lesson-btn');

@@ -570,6 +570,10 @@ body.dark-theme {
   outline-color: green;
 }
 
+.modal.show {
+  display: flex;  /* Показываем окно */
+}
+
 /*=============== CALENDAR ===============*/
 
 fieldset {
