@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from datetime import date, timedelta
+from datetime import date, timedelta, time
 from django.http import JsonResponse
 from .models import Lesson
 
@@ -33,39 +33,41 @@ def get_start_of_week(today):
     return start
 
 def schedule_view1(request, offset="0"):
-    """Обрабатывает отображение расписания."""
     try:
-        offset = int(offset)  # Преобразуем строку в число
+        offset = int(offset)
     except ValueError:
-        offset = 0  # Если значение некорректное, сбросить на 0
+        offset = 0
 
-    today = date(2024, 12, 8)  # Начальная точка (суббота)
-    start_of_week = today + timedelta(weeks=offset)
-    parity = (offset % 2 == 0)  # Четность недели: True = четная, False = нечетная
+    today = date.today()  # Текущая дата
+    start_of_week = today + timedelta(weeks=offset)  # Дата начала недели
+    week_number = start_of_week.isocalendar()[1]  # Номер недели
+    parity = (week_number % 2 == 0)  # Четность недели
 
-    # Список дней недели
+    # Список дней недели с датами
     days = [
-        (start_of_week + timedelta(days=i), day)
+        {
+            'date': start_of_week + timedelta(days=i),
+            'day_name': day
+        }
         for i, day in enumerate(['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'])
     ]
 
-    # Получаем все уроки для нужной недели и сортируем их по дням недели и времени
     lessons = Lesson.objects.filter(week_parity=parity).order_by('day', 'start_time')
 
-    # Создаем словарь для уроков по дням недели
-    lessons_by_day = {day: [] for day in ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']}
+    # Сортируем уроки по дням недели
+    lessons_by_day = {day['day_name']: [] for day in days}
     for lesson in lessons:
         lessons_by_day[lesson.day].append(lesson)
 
-    # Передаем в контекст словарь с уроками по дням
     context = {
-        'days': days,
-        'lessons_by_day': lessons_by_day,  # Здесь уже передаются уроки для каждого дня
-        'offset': offset,  # Передаём текущий offset в шаблон
-        'parity': 'Чётная' if parity else 'Нечётная',  # Четность недели
+        'days': days,  # Список дней с датами
+        'lessons_by_day': lessons_by_day,
+        'offset': offset,
+        'parity': 'Чётная' if parity else 'Нечётная',
     }
 
     return render(request, 'main/schedule.html', context)
+
 
 
 def add_lesson(request):
@@ -100,57 +102,71 @@ def delete_lesson(request, lesson_id):
     Lesson.objects.filter(id=lesson_id).delete()
     return JsonResponse({'success': True})
 
-def parse_schedule(request):
-    if request.method == 'POST':
-        url = 'https://guap.ru/rasp/?g=319'
-        response = requests.get(url)
+URL = "https://guap.ru/rasp/?g=319"
 
-        if response.status_code != 200:
-            return JsonResponse({'error': 'Не удалось загрузить страницу'}, status=500)
-
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-        # Примерный процесс извлечения данных
-        lessons = []
+def parse_schedule():
+    # Получаем HTML страницу
+    response = requests.get(URL)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    # Находим все теги h3 с днями недели
+    days = soup.find_all('h3')
+    
+    for day in days:
+        day_name = day.get_text(strip=True)
         
-        # Пожалуйста, уточните структуру HTML и измените эти селекторы
-        rows = soup.find_all('tr', {'class': 'lesson-row'})  # Это пример, возможно, вам нужно будет изменить селектор
-        for row in rows:
-            day = row.find('td', {'class': 'day'}).text.strip()  # Пример, адаптируйте селекторы под структуру сайта
-            subject = row.find('td', {'class': 'subject'}).text.strip()
-            room = row.find('td', {'class': 'room'}).text.strip()
-            start_time = row.find('td', {'class': 'start-time'}).text.strip()
-            end_time = row.find('td', {'class': 'end-time'}).text.strip()
-            lesson_type = row.find('td', {'class': 'lesson-type'}).text.strip()
+        # Пропускаем, если нет дней недели в расписании
+        if day_name not in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']:
+            continue
+        
+        # Находим все пары в этот день
+        lessons = day.find_next_siblings('div')  # Находим все div'ы, идущие после h3
+        
+        for lesson in lessons:
+            # Ищем время начала и конца пары
+            time_tag = lesson.find('h4')
+            if time_tag:
+                start_time, end_time = parse_time(time_tag.get_text(strip=True))
+            
+            # Ищем тип недели (четная/нечетная)
+            week_parity = True  # По умолчанию четная неделя
+            if lesson.find('b', class_='dn'):
+                week_parity = False
+            elif lesson.find('b', class_='up'):
+                week_parity = True
+            else:
+                week_parity = None  # Если ничего не указано, на обе недели
+            
+            # Получаем название предмета
 
-            # Преобразуем день в код, например: 'Понедельник' -> 'ПН'
-            day_map = {
-                'Понедельник': 'ПН',
-                'Вторник': 'ВТ',
-                'Среда': 'СР',
-                'Четверг': 'ЧТ',
-                'Пятница': 'ПТ',
-                'Суббота': 'СБ',
-                'Воскресенье': 'ВС',
-            }
-            # Также стоит проверить, какой тип недели (четная/нечетная)
-            week_parity = True  # Это нужно определять на основе текущей недели или информации на сайте
-
-            # Сохраняем данные в базу
-            lesson = Lesson.objects.create(
-                day=day_map.get(day, 'ПН'),  # Если день не найден, по умолчанию - Понедельник
-                week_parity=week_parity,  # Здесь предполагается, что все пары принадлежат одной неделе
+            # Получаем аудиторию
+            room_tag = lesson.find('em')
+            if room_tag:
+                room = room_tag.get_text(strip=True)
+            
+            # Ищем тип занятия
+            lesson_type_tag = lesson.find('b')
+            if lesson_type_tag:
+                lesson_type = lesson_type_tag.get_text(strip=True)
+            
+            # Сохраняем данные в модель Lesson
+            lesson_obj = Lesson(
+                day=day_name[:2],  # Сохраняем только первые две буквы дня недели
+                week_parity=week_parity,
                 subject=subject,
                 room=room,
                 start_time=start_time,
                 end_time=end_time,
                 lesson_type=lesson_type
             )
-            lessons.append(lesson)
+            lesson_obj.save()
 
-        return JsonResponse({'message': 'Парсинг завершён успешно', 'lessons': [str(lesson) for lesson in lessons]})
-    else:
-        return JsonResponse({'error': 'Неверный метод запроса'}, status=400)
+def parse_time(time_str):
+    # Преобразуем строку времени в объекты time
+    start_time_str, end_time_str = time_str.split(' - ')
+    start_time = time(*map(int, start_time_str.split(':')))
+    end_time = time(*map(int, end_time_str.split(':')))
+    return start_time, end_time
 
 
 
