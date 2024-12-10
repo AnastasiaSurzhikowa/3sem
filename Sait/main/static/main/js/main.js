@@ -10,9 +10,9 @@ const showSidebar = (toggleId, sidebarId, headerId, mainId) =>{
            /* Show sidebar */
            sidebar.classList.toggle('show-sidebar')
            /* Add padding header */
-           header.classList.toggle('left-pd')
+           header.classList.toggle('right-pd')
            /* Add padding main */
-           main.classList.toggle('left-pd')
+           main.classList.toggle('right-pd')
        })
    }
 }

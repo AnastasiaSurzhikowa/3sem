@@ -96,10 +96,13 @@ body.dark-theme {
 /*=============== REUSABLE CSS CLASSES ===============*/
 .container {
   margin-inline: 1.5rem;
+  padding-left: 114px;
+ /*  margin-top: 20rem; */
 }
 
 .main {
   padding-top: 5rem;
+  padding-left: 114px;
 }
 
 /*=============== HEADER ===============*/
@@ -180,7 +183,7 @@ body.dark-theme {
   grid-template-columns: repeat(2, max-content);
   align-items: center;
   column-gap: 1rem;
-  padding-left: 2rem;
+  padding-left: 20px;
 }
 
 .sidebar__img {
@@ -202,11 +205,13 @@ body.dark-theme {
   font-size: var(--normal-font-size);
   color: var(--title-color);
   transition: color .4s;
+  opacity: 0;
 }
 
 .sidebar__info span {
   font-size: var(--smaller-font-size);
   color:hsl(228, 12%, 61%);
+  opacity: 0;
 }
 
 .sidebar__content {
@@ -253,6 +258,7 @@ body.dark-theme {
 
 .sidebar__link span {
   font-weight: var(--font-semi-bold);
+  opacity: 0;
 }
 
 .sidebar__link:hover {
@@ -275,6 +281,7 @@ body.dark-theme {
 .sidebar__theme span {
   font-size: var(--normal-font-size);
   font-family: var(--body-font);
+  opacity: 0;
 }
 
 /* Show sidebar */
@@ -297,14 +304,15 @@ body.dark-theme {
 }
 
 /*=============== MAIN ===============*/
-.main {
-  /* display: grid; 
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: repeat(3, 300px); */ 
-  /* Отступы между рядами */
-  /* row-gap: 20px;  */
-  /* Отступы между колонками */
-  /* column-gap: 20px; */
+.testing {
+  /* display: grid; */
+ /*  background-color: red; */
+  height: 2rem;
+  width: auto;
+}
+
+.switch_week {
+  margin-bottom: 1.5rem;
 }
 
 .calendar_main {
@@ -516,9 +524,9 @@ body.dark-theme {
   position: relative;
   max-width: 700px;
   min-width: 500px;
-  background-color: #fff;
+  background-color:var(--body-color);
   margin: auto;
-  color: #000;
+  color: var(--first-color);
   border-radius: 16px;
   padding: 30px 60px 60px;
   cursor: default;
@@ -640,6 +648,7 @@ h4 {
 /* .edit_info_profile {
   float: left;
 } */
+/*=============== TASK ===============*/
 
 /*=============== DEADLINE ===============*/
 :root {
@@ -1243,7 +1252,7 @@ h4 {
 @media screen and (min-width: 1150px) {
   .header {
     margin: 1rem;
-    padding-left: 340px;
+    padding-left: 114px;
     transition: padding .4s;
   }
   .header__container {
@@ -1256,7 +1265,7 @@ h4 {
 
   .sidebar {
     left: 0;
-    width: 316px;
+    width: 90px;
     margin: 1rem;
   }
   .sidebar__info, 
@@ -1264,34 +1273,43 @@ h4 {
     transition: opacity .4s;
   }
   .sidebar__user, 
-  .sidebar__title {
+  .sidebar__title,
+  .sidebar__info h3,
+  .sidebar__info span {
     transition: padding .4s;
+    transition: opacity .4s;
   }
 
   /* Reduce sidebar */
   .show-sidebar {
-    width: 90px;
+    width: 316px;
   }
-  .show-sidebar .sidebar__user {
+  /* .show-sidebar .sidebar__user {
     padding-left: 1.25rem;
-  }
+  } */
   .show-sidebar .sidebar__title {
     padding-left: 0;
     margin-inline: auto;
   }
-  .show-sidebar .sidebar__info, 
+   .show-sidebar .sidebar__info h3, 
   .show-sidebar .sidebar__link span {
-    opacity: 0;
+    transition: opacity .4s;
+    opacity: 1;
+  } 
+
+  .show-sidebar .sidebar__info span {
+    transition: opacity .4s;
+    opacity: 1;
   }
 
   .main {
-    padding-left: 340px;
-    padding-top: 8rem;
+    padding-left: 114 px;
+    padding-top: 7rem;
     transition: padding .4s;
   }
 
   /* Add padding left */
-  .left-pd {
-    padding-left: 114px;
+  .right-pd {
+    padding-left: 340px;
   }
 }

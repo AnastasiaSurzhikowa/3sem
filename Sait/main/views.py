@@ -23,6 +23,9 @@ def deadline(request):
 def calendar2(request):
     return render(request, 'main/calendar2.html')
 
+def task(request):
+    return render(request, 'main/task.html')
+
 def schedule_view(request):
     group_value = "317"
     group_value1 = "12312"  # Инициализация переменной по умолчанию
