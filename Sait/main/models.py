@@ -1,6 +1,13 @@
 from django.db import models
+from django.conf import settings
 
 class Lesson(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="lessons",
+        default=1
+    )
     DAY_CHOICES = [
         ('ПН', 'Понедельник'),
         ('ВТ', 'Вторник'),

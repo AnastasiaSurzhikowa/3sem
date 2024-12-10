@@ -52,7 +52,7 @@ def schedule_view1(request, offset="0"):
         for i, day in enumerate(['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'])
     ]
 
-    lessons = Lesson.objects.filter(week_parity=parity).order_by('day', 'start_time')
+    lessons = Lesson.objects.filter(week_parity=parity, user=request.user).order_by('day', 'start_time')
 
     # Сортируем уроки по дням недели
     lessons_by_day = {day['day_name']: [] for day in days}
@@ -83,6 +83,7 @@ def add_lesson(request):
 
         # Создание урока
         lesson = Lesson.objects.create(
+            user=request.user,
             subject=subject,
             room=room,
             start_time=start_time,
@@ -99,7 +100,7 @@ def add_lesson(request):
     return redirect('schedule')
 
 def delete_lesson(request, lesson_id):
-    Lesson.objects.filter(id=lesson_id).delete()
+    Lesson.objects.filter(id=lesson_id, user=request.user).delete()
     return JsonResponse({'success': True})
 
 #Задания
