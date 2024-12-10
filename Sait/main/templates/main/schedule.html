@@ -1,0 +1,114 @@
+{% extends "main/layout.html" %}
+{% load custom_tags %}
+{% load static %}
+
+{% block body %}
+<main class="main container" id="main">
+  <div class="container">
+    <h1>Расписание</h1>
+
+    <!-- Кнопки для переключения между неделями -->
+    <div class="week-navigation">
+      <button id="prev-week">Предыдущая неделя</button>
+      <button id="next-week">Следующая неделя</button>
+    </div>
+
+    <!-- Кнопка для парсинга расписания -->
+    <button id="parse-schedule-btn" class="btn btn-primary">Парсить расписание</button>
+    
+    <!-- Информация о чётности недели -->
+    <p id="week-parity-info">
+      {% if offset|add:1|divisibleby:2 %}
+        Чётная неделя
+      {% else %}
+        Нечётная неделя
+      {% endif %}
+    </p>
+
+    <!-- Кнопка для открытия модального окна "Добавить пару" -->
+    <button id="add-lesson-btn" class="btn btn-primary">Добавить пару</button>
+
+    <!-- Контейнер для расписания -->
+    <div class="week-schedule">
+    {% for day in days %}
+        <div class="day-schedule">
+            <h2>{{ day.day_name }} ({{ day.date|date:"d.m.Y" }})</h2>
+            <ul class="lessons-list">
+                {% for lesson in lessons_by_day|get_item:day.day_name %}
+                    <li>
+                        <strong>{{ lesson.subject }}</strong> - {{ lesson.start_time|time:"H:i" }} - {{ lesson.end_time|time:"H:i" }}
+                        <span>{{ lesson.room }}</span>
+                        <button class="delete-btn" data-id="{{ lesson.id }}">Удалить</button>
+                    </li>
+                {% empty %}
+                    <li>Нет занятий</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+
+
+    <!-- Модальное окно для добавления пары -->
+    <div id="add-lesson-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        
+
+        <h2>Добавить пару</h2>
+        <form id="add-lesson-form" method="POST" action="/schedule/add/">
+          {% csrf_token %}
+
+          <!-- День недели -->
+          <label for="day">День недели:</label>
+          <select name="day" id="day" required>
+            <option value="ПН">Понедельник</option>
+            <option value="ВТ">Вторник</option>
+            <option value="СР">Среда</option>
+            <option value="ЧТ">Четверг</option>
+            <option value="ПТ">Пятница</option>
+            <option value="СБ">Суббота</option>
+            <option value="ВС">Воскресенье</option>
+          </select>
+
+          <!-- Название предмета -->
+          <label for="subject">Название предмета:</label>
+          <input type="text" id="subject" name="subject" required>
+
+          <!-- Аудитория -->
+          <label for="room">Аудитория:</label>
+          <input type="text" id="room" name="room" required>
+
+          <!-- Время начала -->
+          <label for="start_time">Время начала:</label>
+          <input type="time" id="start_time" name="start_time" required>
+
+          <!-- Время окончания -->
+          <label for="end_time">Время окончания:</label>
+          <input type="time" id="end_time" name="end_time" required>
+
+          <!-- Тип занятия -->
+          <label for="lesson_type">Тип занятия:</label>
+          <select name="lesson_type" id="lesson_type" required>
+            <option value="Л">Лекция</option>
+            <option value="ПР">Практическое занятие</option>
+            <option value="ЛР">Лабораторное занятие</option>
+            <option value="КП">Курсовой проект</option>
+            <option value="КР">Курсовая работа</option>
+          </select>
+
+          <label for="week_parity">Четность недели:</label>
+          <select name="week_parity" id="week_parity" required>
+            <option value="false">Чётная</option>
+            <option value="true">Нечётная</option>
+          </select>
+
+          <!-- Кнопка для добавления пары -->
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+  <script src="{% static 'main/js/schedule.js' %}"></script>
+{% endblock %}

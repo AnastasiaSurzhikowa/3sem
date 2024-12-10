@@ -32,7 +32,7 @@
       <!--=============== SIDEBAR ===============-->
       <nav class="sidebar" id="sidebar">
          <div class="sidebar__container">
-            <a href="profile" style="display: block;"> <div class="sidebar__user">
+            <a href="{% url 'view_profile' %}" style="display: block;"> <div class="sidebar__user">
                <div class="sidebar__img">
                      <img src="{% if user.image %} {{user.image.url}} {% else %} {% static "main\img\defoult_avatar.svg" %} {% endif %}" alt="">
                </div>
@@ -47,27 +47,27 @@
                <div>
                   <div class="sidebar__list">
                      
-                     <a href="calendar" class="sidebar__link active-link">
+                     <a href="{% url 'view_calendar' %}" class="sidebar__link active-link">
                         <i class="ri-calendar-fill"></i>
                         <span>Календарь</span>
                      </a>
                      
-                     <a href="task" class="sidebar__link">
+                     <a href="#" class="sidebar__link">
                         <i class="ri-task-fill"></i>
-                        <span>Задачи</span>
+                        <span>Рассписание</span>
                      </a>
 
-                     <a href="deadline" class="sidebar__link">
+                     <a href="{% url 'view_deadline' %}" class="sidebar__link">
                         <i class="ri-fire-fill"></i>
                         <span>Дедлайны</span>
                      </a>
 
-                     <a href="#" class="sidebar__link">
+                     <a href="{% url 'tasks' %}" class="sidebar__link">
                         <i class="ri-group-fill"></i>
-                        <span>Группа</span>
+                        <span>Задания</span>
                      </a>
 
-                     <a href="calendar2" class="sidebar__link">
+                     <a href="{% url 'view_calendar2' %}" class="sidebar__link">
                         <i class="ri-timer-2-fill"></i>
                         <span>старый календарь</span>
                      </a>
@@ -78,7 +78,7 @@
                   <h3 class="sidebar__title"></h3>
 
                   <div class="sidebar__list">
-                     <a href="contact" class="sidebar__link">
+                     <a href="{% url 'view_contact' %}" class="sidebar__link">
                         <i class="ri-settings-3-fill"></i>
                         <span>Пробная версия расписания</span>
                      </a>
@@ -103,7 +103,7 @@
                   </i>
                </button>
 
-               <a href="logout" style="display: block;"><button class="sidebar__link">
+               <a href="{% url 'logout' %}" style="display: block;"><button class="sidebar__link">
                   <i class="ri-logout-box-r-fill"></i>
                   <span>Выйти</span>
                </button></a>

@@ -1,6 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from datetime import date, timedelta, time
+from django.http import JsonResponse
+from .models import Lesson, Task
+
 import requests
 from bs4 import BeautifulSoup
+
 
 def about(request):
     return render(request, 'main/about.html')
@@ -22,9 +27,6 @@ def deadline(request):
 
 def calendar2(request):
     return render(request, 'main/calendar2.html')
-
-def task(request):
-    return render(request, 'main/task.html')
 
 def schedule_view(request):
     group_value = "317"

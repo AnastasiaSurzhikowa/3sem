@@ -15,6 +15,10 @@
         <span class="logo">Calendar</span>
         <h3>Навигация</h3>
         <ul>
+            <a href="{% url 'view_calendar' %}" class="sidebar__link active-link">
+                        <i class="ri-calendar-fill"></i>
+                        <span>Календарь</span>
+                     </a>
             <a href ="profile"><li><i class="fa-solid fa-user"></i> Личный кабинет</li></a>
             <a href ="calendar"><li><i class="fa-solid fa-calendar-days"></i> Календарь</li></a>
             <a href ="about"><li><i class="fa-solid fa-circle-info"></i> Про нас</li></a>
@@ -23,7 +27,7 @@
     </aside>
     <b>
         <button style="background-color: #929292; width: 170px; height: 30px; border: none; border-radius: 5px; float: right;">
-            <a href="logout" style="text-decoration: none; color: #ffffff; font-size: large;">Log out</a>
+            <a href="/" style="text-decoration: none; color: #ffffff; font-size: large;">Log out</a>
         </button>
     </b>
     <main >
