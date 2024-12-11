@@ -1,6 +1,8 @@
-{% extends "main/layout2.html" %}
+{% extends "main/layout.html" %}
 {% load custom_tags %}
 {% load static %}
+
+{% block title%}Задачи{% endblock %}
 
 {% block body %}
 <main class="main container" id="main">
@@ -38,7 +40,7 @@
                         <button class="delete-btn" data-id="{{ task.id }}">Удалить</button>
                     </li>
                 {% empty %}
-                    <li>Нет занятий</li>
+                    <li>Нет задач</li>
                 {% endfor %}
             </ul>
         </div>

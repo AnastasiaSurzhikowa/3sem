@@ -1,9 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
-from django.urls import reverse
-
-
-from users.models import User
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 
 def index(request):
@@ -15,7 +11,7 @@ def index(request):
             user = auth.authenticate(username = username, password = password)
             if user: 
                 auth.login(request, user)
-                return HttpResponseRedirect('calendar')
+                return HttpResponseRedirect('profile')
     else:
         form = UserLoginForm()
     context = {'form': form}

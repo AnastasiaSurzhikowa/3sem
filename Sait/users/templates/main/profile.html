@@ -1,14 +1,13 @@
-{% extends 'main/layout2.html'%}
+{% extends 'main/layout.html'%}
 {% load static%}
 
-{% block title%}Profile{% endblock %}
+{% block title%}Профиль{% endblock %}
 
 {% block body%}
 <main class="main container" id="main" >
     <form action="profile" method="post" enctype = "multipart/form-data">
         {% csrf_token %}
         <fieldset>
-            
             <div class="form_edit_profile">
                 <div class="info_h3">
                     <h3 class="h3_info_css">Личные данные</h3>
@@ -56,7 +55,6 @@
                             {{ form.username }}
                         </div>
                         <div>
-                            
                             <label class="proff" for="{{ form.email.id_for_label}}">E-mail</label>
                             {{ form.email }}
                         </div> 

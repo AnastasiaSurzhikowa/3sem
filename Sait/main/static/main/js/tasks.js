@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', async (e) => {
             const taskId = e.target.dataset.id;
-            const confirmed = confirm('Вы уверены, что хотите удалить эту пару?');
+            const confirmed = confirm('Вы уверены, что хотите удалить эту задачу?');
 
             if (confirmed) {
                 try {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         window.location.reload(); // Перезагружаем страницу после удаления
                     } else {
-                        alert('Ошибка при удалении пары.');
+                        alert('Ошибка при удалении задания.');
                     }
                 } catch (error) {
                     console.error('Ошибка сети:', error);

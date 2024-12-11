@@ -10,20 +10,14 @@ from bs4 import BeautifulSoup
 def about(request):
     return render(request, 'main/about.html')
 
-def testpic(request):
-    return render(request, 'main/testpic.html')
-
-def calendar(request):
-    return render(request, 'main/calendar.html')
-
-def mainpage(request):
-    return render(request, 'main/mainpage.html')
-
-def contact(request):
-    return render(request, 'main/about.html')
+def parse(request):
+    return render(request, 'main/parse.html')
 
 def deadline(request):
     return render(request, 'main/deadline.html')
+
+def calendar(request):
+    return render(request, 'main/calendar.html')
 
 def calendar2(request):
     return render(request, 'main/calendar2.html')
@@ -32,14 +26,21 @@ def get_start_of_week(today):
     start = today - timedelta(days=today.weekday())
     return start
 
-def schedule_view1(request, offset="0"):
+def schedule_view(request, offset="0"):
     try:
         offset = int(offset)
     except ValueError:
         offset = 0
 
     today = date.today()  # Текущая дата
-    start_of_week = today + timedelta(weeks=offset)  # Дата начала недели
+
+    # Определяем, сколько дней нужно отнять, чтобы получить понедельник этой недели
+    start_of_week = today - timedelta(days=today.weekday())  # Понедельник текущей недели
+
+    # Если offset больше 0, смещаем на нужное количество недель
+    start_of_week += timedelta(weeks=offset)
+
+    # Номер недели и чётность недели
     week_number = start_of_week.isocalendar()[1]  # Номер недели
     parity = (week_number % 2 == 0)  # Четность недели
 
@@ -67,8 +68,6 @@ def schedule_view1(request, offset="0"):
     }
 
     return render(request, 'main/schedule.html', context)
-
-
 
 def add_lesson(request):
     if request.method == 'POST':
@@ -112,9 +111,16 @@ def task_view(request, offset="0"):
         offset = 0
 
     today = date.today()  # Текущая дата
-    start_of_week = today + timedelta(weeks=offset)  # Дата начала недели
+
+    # Определяем, сколько дней нужно отнять, чтобы получить понедельник этой недели
+    start_of_week = today - timedelta(days=today.weekday())  # Понедельник текущей недели
+
+    # Если offset больше 0, смещаем на нужное количество недель
+    start_of_week += timedelta(weeks=offset)
+
+    # Номер недели и чётность недели
     week_number = start_of_week.isocalendar()[1]  # Номер недели
-    parity = (week_number % 2 == 0)  # Чётность недели
+    parity = (week_number % 2 == 0)  # Четность недели
 
     # Список дней недели с датами
     days = [
@@ -145,10 +151,6 @@ def task_view(request, offset="0"):
     }
 
     return render(request, 'main/tasks.html', context)
-
-
-
-
 
 def add_task(request):
     if request.method == 'POST':
@@ -243,9 +245,7 @@ def parse_time(time_str):
     end_time = time(*map(int, end_time_str.split(':')))
     return start_time, end_time
 
-
-
-def schedule_view(request):
+def parse_view(request):
     group_value = "317"
     group_value1 = "12312"  # Инициализация переменной по умолчанию
     
@@ -272,10 +272,10 @@ def schedule_view(request):
                 legend.decompose()
 
             # Отправляем очищенный HTML в шаблон
-            return render(request, 'main/contact.html', {'schedule_html': result_element.prettify() })
+            return render(request, 'main/parse.html', {'schedule_html': result_element.prettify() })
         else:
-            return render(request, 'main/contact.html', {'schedule_html': 'Элемент с классом "result" не найден.'})
+            return render(request, 'main/parse.html', {'schedule_html': 'Элемент с классом "result" не найден.'})
 
     except requests.exceptions.RequestException as e:
         # Обработка ошибок, например, при сетевых проблемах
-        return render(request, 'main/contact.html', {'schedule_html': f'Ошибка при запросе: {str(e)}'})
+        return render(request, 'main/parse.html', {'schedule_html': f'Ошибка при запросе: {str(e)}'})
