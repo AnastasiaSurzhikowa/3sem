@@ -51,28 +51,27 @@
     <div id="add-task-modal" class="modal">
       <div class="modal-content">
         <span id="close-modal" class="close">&times;</span>
-        <h2>Добавить Задание</h2>
+        <h2 class="h2_tasks">Добавить Задание</h2>
         <form id="add-task-form" method="POST" action="/tasks/add/">
           {% csrf_token %}
           
           <!-- Название задания -->
           <label for="subject">Название задания:</label>
-          <input type="text" id="subject" name="subject" required>
+          <input class="text_input" type="text" id="subject" name="subject" required>
 
           <!-- Описание задания -->
           <label for="descriptions">Описание:</label>
-          <input type="text" id="descriptions" name="descriptions" required>
+          <input class="text_input" type="text" id="descriptions" name="descriptions" required>
 
           <!-- Дата задания -->
           <label for="date">Дата:</label>
-          <input type="date" name="date" id="date" required>
+          <input class="text_input" type="date" name="date" id="date" required>
 
           <!-- Кнопка для добавления задания -->
-          <button type="submit">Добавить</button>
+          <button class="btn-section" type="submit">Добавить</button>
         </form>
       </div>
-    </div>
-  </div>
+
 </main>
 <script src="{% static 'main/js/tasks.js' %}"></script>
 {% endblock %}

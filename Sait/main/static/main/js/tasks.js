@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.remove('show');
         }
     });
-    
+
     // Обработка формы добавления пары
     const addtaskForm = document.getElementById('add-task-form');
     addtaskForm.addEventListener('submit', async (e) => {
