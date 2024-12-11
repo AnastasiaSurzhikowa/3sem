@@ -114,7 +114,7 @@ def task_view(request, offset="0"):
     today = date.today()  # Текущая дата
     start_of_week = today + timedelta(weeks=offset)  # Дата начала недели
     week_number = start_of_week.isocalendar()[1]  # Номер недели
-    parity = (week_number % 2 == 0)  # Четность недели
+    parity = (week_number % 2 == 0)  # Чётность недели
 
     # Список дней недели с датами
     days = [
@@ -125,12 +125,17 @@ def task_view(request, offset="0"):
         for i, day in enumerate(['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'])
     ]
 
-    tasks = Task.objects.filter(week_parity=parity).order_by('day', 'start_time')
+    # Получаем задания для текущей недели
+    tasks = Task.objects.filter(
+        user=request.user,
+        date__gte=start_of_week,
+        date__lt=start_of_week + timedelta(days=7)
+    ).order_by('date')
 
-    # Сортируем уроки по дням недели
-    tasks_by_day = {day['day_name']: [] for day in days}
+    # Группируем задания по дате
+    tasks_by_day = {day['date']: [] for day in days}
     for task in tasks:
-        tasks_by_day[task.day].append(task)
+        tasks_by_day[task.date].append(task)
 
     context = {
         'days': days,  # Список дней с датами
@@ -139,7 +144,9 @@ def task_view(request, offset="0"):
         'parity': 'Чётная' if parity else 'Нечётная',
     }
 
-    return render(request, 'main/schedule.html', context)
+    return render(request, 'main/tasks.html', context)
+
+
 
 
 
@@ -148,26 +155,21 @@ def add_task(request):
         # Получение данных из запроса
         subject = request.POST.get('subject')
         descriptions = request.POST.get('descriptions')
-        start_time = request.POST.get('start_time')
-        task_type = request.POST.get('lesson_type')
-        day = request.POST.get('day')
-        week_parity = request.POST.get('week_parity') == 'true'  # Преобразование строки в boolean
-
-        # Создание урока
-        task = Lesson.objects.create(
+        date = request.POST.get('date')  # Получаем только дату
+        
+        # Создание задания
+        task = Task.objects.create(
             subject=subject,
             descriptions=descriptions,
-            start_time=start_time,
-            task_type=task_type,
-            day=day,
-            week_parity=week_parity
+            user=request.user,
+            date=date,  # Сохраняем только дату
         )
 
         # Возврат JSON-ответа для AJAX-запросов
         return JsonResponse({'success': True, 'task_id': task.id})
 
     # Если метод GET — можно вернуть страницу добавления или редирект
-    return redirect('schedule')
+    return redirect('tasks')
 
 def delete_task(request, task_id):
     Task.objects.filter(id=task_id).delete()

@@ -1,4 +1,4 @@
-{% extends "main/layout.html" %}
+{% extends "main/layout2.html" %}
 {% load custom_tags %}
 {% load static %}
 
@@ -9,8 +9,8 @@
 
     <!-- Кнопки для переключения между неделями -->
     <div class="week-navigation">
-      <button id="prev-week1">Предыдущая неделя</button>
-      <button id="next-week1">Следующая неделя</button>
+      <button id="prev-week">Предыдущая неделя</button>
+      <button id="next-week">Следующая неделя</button>
     </div>
     
     <!-- Информация о чётности недели -->
@@ -23,18 +23,19 @@
     </p>
 
     <!-- Кнопка для открытия модального окна "Добавить задание" -->
-    <button id="add-lesson-btn" class="btn btn-primary">Добавить задание</button>
+    <button id="add-task-btn" class="btn btn-primary">Добавить задание</button>
 
     <!-- Контейнер для расписания -->
     <div class="week-schedule">
     {% for day in days %}
         <div class="day-schedule">
             <h2>{{ day.day_name }} ({{ day.date|date:"d.m.Y" }})</h2>
-            <ul class="lessons-list">
-                {% for task in tasks_by_day|get_item:day.day_name %}
+            <ul class="tasks-list">
+                {% for task in tasks_by_day|get_item:day.date %}
                     <li>
-                        <strong>{{ task.subject }}</strong> - {{ task.start_time|time:"H:i" }} - {{ task.end_time|time:"H:i" }}
-                        <span>{{ task.room }}</span>
+                        <strong>{{ task.subject }}</strong>
+                        <span>{{ task.descriptions }}</span>
+                        <button class="delete-btn" data-id="{{ task.id }}">Удалить</button>
                     </li>
                 {% empty %}
                     <li>Нет занятий</li>
@@ -42,57 +43,34 @@
             </ul>
         </div>
     {% endfor %}
-</div>
+    </div>
 
-
-    <!-- Модальное окно для добавления пары -->
-    <div id="add-lesson-modal" class="modal">
+    <!-- Модальное окно для добавления задания -->
+    <div id="add-task-modal" class="modal">
       <div class="modal-content">
         <span id="close-modal" class="close">&times;</span>
-        
-
         <h2>Добавить Задание</h2>
-        <form id="add-lesson-form" method="POST" action="/tasks/add/">
+        <form id="add-task-form" method="POST" action="/tasks/add/">
           {% csrf_token %}
-
-          <!-- День недели -->
-          <label for="day">День недели:</label>
-          <select name="day" id="day" required>
-            <option value="ПН">Понедельник</option>
-            <option value="ВТ">Вторник</option>
-            <option value="СР">Среда</option>
-            <option value="ЧТ">Четверг</option>
-            <option value="ПТ">Пятница</option>
-            <option value="СБ">Суббота</option>
-            <option value="ВС">Воскресенье</option>
-          </select>
-
-          <!-- Название предмета -->
+          
+          <!-- Название задания -->
           <label for="subject">Название задания:</label>
           <input type="text" id="subject" name="subject" required>
 
-          <!-- Время -->
-          <label for="start_time">Время:</label>
-          <input type="time" id="start_time" name="start_time" required>
-
-          <!-- Аудитория -->
-          <label for="descriptions">Аудитория:</label>
+          <!-- Описание задания -->
+          <label for="descriptions">Описание:</label>
           <input type="text" id="descriptions" name="descriptions" required>
 
-          <!-- Тип занятия -->
+          <!-- Дата задания -->
+          <label for="date">Дата:</label>
+          <input type="date" name="date" id="date" required>
 
-          <label for="week_parity">Четность недели:</label>
-          <select name="week_parity" id="week_parity" required>
-            <option value="false">Чётная</option>
-            <option value="true">Нечётная</option>
-          </select>
-
-          <!-- Кнопка для добавления пары -->
+          <!-- Кнопка для добавления задания -->
           <button type="submit">Добавить</button>
         </form>
       </div>
     </div>
   </div>
 </main>
-  <script src="{% static 'main/js/schedule.js' %}"></script>
+<script src="{% static 'main/js/tasks.js' %}"></script>
 {% endblock %}

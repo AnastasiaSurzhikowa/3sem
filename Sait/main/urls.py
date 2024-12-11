@@ -19,7 +19,7 @@ urlpatterns = [
     path('schedule/parse/', views.parse_schedule, name='parse_schedule'),
 
     path('tasks/', views.task_view, {'offset': 0}, name='tasks'),
-    re_path(r'^task/(?P<offset>-?\d+)/$', views.task_view, name='tasks_offset'),
+    re_path(r'^tasks/(?P<offset>-?\d+)/$', views.task_view, name='tasks_offset'),
     path('tasks/add/', views.add_task, name='add_task'),
     path('tasks/delete/<int:task_id>/', views.delete_task, name='delete_task'),
     
