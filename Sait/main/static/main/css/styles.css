@@ -15,6 +15,7 @@
   --shadow-color: hsla(228, 80%, 4%, .1);
   --lesson-color: hsl(234, 100%, 96%);
   --lsn-color: hsl(227, 8%, 23%);
+  --btn-color: rgb(135, 117, 225, 0.8);
 
   /*========== Font and typography ==========*/
   /*.5rem = 8px | 1rem = 16px ...*/
@@ -376,7 +377,7 @@ body.dark-theme {
   font-weight: 600;
 }
 
-.day_data {
+.day_datass {
   font-weight: 300;
   text-align: right;
 }
@@ -495,7 +496,8 @@ body.dark-theme {
 .calendar_check {
   text-align: right;
 }
-/* ----------------pop button------------------------- */
+
+/* ----------------pop button-------Modal------------------ */
 
 .navigation {
   width: 100%;
@@ -541,7 +543,7 @@ body.dark-theme {
 .modal {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.05);
   cursor: pointer;
   padding: 30px;
   overflow-y: auto;
@@ -550,8 +552,9 @@ body.dark-theme {
 
 .modal__main {
   position: relative;
-  max-width: 700px;
-  min-width: 500px;
+  /* max-width: 700px;
+  min-width: 500px; */
+  width: 20rem;
   background-color:var(--body-color);
   margin: auto;
   color: var(--first-color);
@@ -567,8 +570,8 @@ body.dark-theme {
 }
 
 .modal__container {
-  font-size: 20px;
-  margin-bottom: 30px;
+  font-size: 15px;
+  margin-bottom: 20px;
 }
 
 .modal__btn {
@@ -661,6 +664,89 @@ hr {
 }
  */
 
+
+
+/* ================== MODAL TASKS=====================*/
+
+.tasks_info {
+  margin-bottom: 1rem;
+}
+.text_input {
+  display: block;
+  width: 100%;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--body-font);
+  background-color: var(--body-color);
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin-bottom: 10px;
+}
+.text_input.time {
+  width: 50%;
+}
+.time_btn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.h2_tasks {
+  margin-bottom: 16px;
+}
+.btn-section {
+  background-color: var(--div-color);
+  border: 2px solid white;
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  border-radius: 15px;
+  margin-top: 30px;
+}
+.btn-section:hover {
+  background-color: var(--btn-color);
+}
+
+.btn-section:focus-visible {
+  outline-color: yellow;
+}
+.modal-content {
+  position: relative;
+  width: 30rem;
+  background-color:var(--body-color);
+  margin: auto;
+  color: var(--body-font);
+  border-radius: 16px;
+  padding: 30px 30px 30px;
+  cursor: default;
+  margin-top: 70px;
+}
+.close {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  outline: 1px solid transparent;
+  outline-offset: 3px;
+  transition: outline-color .15s ease-in-out;
+  border-radius: 3px;
+  padding: 0;
+  text-align: center;
+  display: block;
+  width: 30px;
+  height: 30px;
+}
 
 /*=============== CALENDAR ===============*/
 

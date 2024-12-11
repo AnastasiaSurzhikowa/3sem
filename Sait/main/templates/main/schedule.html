@@ -54,7 +54,7 @@
         <div class="day-schedule">
           <div class="day_header">
             <div class="day_of_week">{{ day.day_name }}</div>
-            <div class="day_data"> {{ day.date|date:"d.m.Y" }}</div>
+            <div class="day_datass"> {{ day.date|date:"d.m.Y" }}</div>
           </div>
             <div class="lessons">
               <ul class="lessons-list">
@@ -79,6 +79,73 @@
     {% endfor %}
 </div>
 
+
+        <!-- Модальное окно для добавления пары -->
+        <div id="add-lesson-modal" class="modal">
+          <div class="modal-content">
+            
+            <h2 class="h2_tasks">Добавить пару</h2>
+            <div class="modal__container">
+              <form id="add-lesson-form" method="POST" action="/schedule/add/">
+                {% csrf_token %}
+      
+                <!-- День недели -->
+                <label for="day">День недели:</label>
+                <select class="text_input" name="day" id="day" required>
+                  <option value="ПН">Понедельник</option>
+                  <option value="ВТ">Вторник</option>
+                  <option value="СР">Среда</option>
+                  <option value="ЧТ">Четверг</option>
+                  <option value="ПТ">Пятница</option>
+                  <option value="СБ">Суббота</option>
+                  <option value="ВС">Воскресенье</option>
+                </select>
+      
+                <!-- Название предмета -->
+                <label for="subject">Название предмета:</label>
+                <input class="text_input" type="text" id="subject" name="subject" required>
+      
+                <!-- Аудитория -->
+                <label for="room">Аудитория:</label>
+                <input class="text_input" type="text" id="room" name="room" required>
+      
+                <!-- Время начала -->
+                <div class="time_btn">
+                  <div class="sdfuyt">
+                    <label for="start_time">Время начала:</label>
+                    <input class="text_input time" type="time" id="start_time" name="start_time" required>
+                  </div>
+                  <div class="idfusegh">
+                  <!-- Время окончания -->
+                    <label for="end_time">Время окончания:</label>
+                    <input class="text_input time" type="time" id="end_time" name="end_time" required>
+                  </div>
+                </div>
+      
+                <!-- Тип занятия -->
+                <label for="lesson_type">Тип занятия:</label>
+                <select class="text_input" name="lesson_type" id="lesson_type" required>
+                  <option value="Л">Лекция</option>
+                  <option value="ПР">Практическое занятие</option>
+                  <option value="ЛР">Лабораторное занятие</option>
+                  <option value="КП">Курсовой проект</option>
+                  <option value="КР">Курсовая работа</option>
+                </select>
+      
+                <label for="week_parity">Четность недели:</label>
+                <select class="text_input" name="week_parity" id="week_parity" required>
+                  <option value="false">Чётная</option>
+                  <option value="true">Нечётная</option>
+                </select>
+      
+                <!-- Кнопка для добавления пары -->
+                <button class="btn-section" type="submit">Добавить</button>
+                <span id="close-modal" class="close">&times;</span>
+              </form>
+            </div>
+          </div>
+        </div>
+    
 
     <!-- Модальное окно для добавления пары -->
     <div id="add-lesson-modal" class="modal">

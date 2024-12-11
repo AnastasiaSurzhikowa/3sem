@@ -42,7 +42,8 @@
     updateWeekDates(currentWeekStartDate);
   });
 
-  // ---------------------------модальное окноооооо-----------
+
+  // =======================модальное окноооооо==============
 const modalController = ({modal, btnOpen, btnClose, time = 300}) => {
     const buttonElems = document.querySelectorAll(btnOpen);
     const modalElem = document.querySelector(modal);
