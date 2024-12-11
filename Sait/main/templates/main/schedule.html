@@ -6,46 +6,75 @@
 
 {% block body %}
 <main class="main container" id="main">
-  <div class="container">
-    <h1>Расписание</h1>
+  <!-- <div class="container"> -->
+    <!-- <div class="head-week">
+      <h1>Расписание</h1> -->
 
-    <!-- Кнопки для переключения между неделями -->
-    <div class="week-navigation">
-      <button id="prev-week">Предыдущая неделя</button>
-      <button id="next-week">Следующая неделя</button>
-    </div>
+        <div class="switch-week">
+          <div class="type_week">
+            <!-- Информация о чётности недели -->
+            <h2 id="week-parity-info">
+              {% if offset|add:1|divisibleby:2 %}
+                Чётная неделя
+              {% else %}
+                Нечётная неделя
+              {% endif %}
+            </h2>
+          </div>
+
+        
+        <!-- Кнопки для переключения между неделями -->
+        <div class="week-navigation">
+            <button id="prev-week">
+              <i class="ri-arrow-left-double-fill"></i>
+            </button>
+            <button id="next-week">
+              <i class="ri-arrow-right-double-fill"></i>
+            </button>
+        </div>
+      </div>
 
     <!-- Кнопка для парсинга расписания -->
-    <button id="parse-schedule-btn" class="btn btn-primary">Парсить расписание</button>
-    
-    <!-- Информация о чётности недели -->
-    <p id="week-parity-info">
-      {% if offset|add:1|divisibleby:2 %}
-        Чётная неделя
-      {% else %}
-        Нечётная неделя
-      {% endif %}
-    </p>
+    <!-- <button id="parse-schedule-btn" class="btn btn-primary">Парсить расписание</button> -->    
 
     <!-- Кнопка для открытия модального окна "Добавить пару" -->
-    <button id="add-lesson-btn" class="btn btn-primary">Добавить пару</button>
+    <!-- <div class="add_lesson">
+      <div class="hr1">
+        <hr>
+      </div> -->
+      <button id="add-lesson-btn" class="btn-primary">Добавить пару</button>
+     <!--  <div class="hr2">
+        <hr>
+      </div>
+    </div> -->
 
     <!-- Контейнер для расписания -->
     <div class="week-schedule">
     {% for day in days %}
         <div class="day-schedule">
-            <h2>{{ day.day_name }} ({{ day.date|date:"d.m.Y" }})</h2>
-            <ul class="lessons-list">
-                {% for lesson in lessons_by_day|get_item:day.day_name %}
-                    <li>
-                        <strong>{{ lesson.subject }}</strong> - {{ lesson.start_time|time:"H:i" }} - {{ lesson.end_time|time:"H:i" }}
-                        <span>{{ lesson.room }}</span>
-                        <button class="delete-btn" data-id="{{ lesson.id }}">Удалить</button>
-                    </li>
-                {% empty %}
-                    <li>Нет занятий</li>
-                {% endfor %}
-            </ul>
+          <div class="day_header">
+            <div class="day_of_week">{{ day.day_name }}</div>
+            <div class="day_data"> {{ day.date|date:"d.m.Y" }}</div>
+          </div>
+            <div class="lessons">
+              <ul class="lessons-list">
+                  {% for lesson in lessons_by_day|get_item:day.day_name %}
+                    <div class="lesson">
+                      <li>
+                        <div class="lesson_header">
+                          <div class="time_lesson">{{ lesson.start_time|time:"H:i" }} - {{ lesson.end_time|time:"H:i" }}</div>
+                          <div class="type_lesson">{{ lesson.room }}</div>
+                        </div>
+                        <a> {{lesson.lesson_type}} </a>
+                        <span class="name_lesson">{{ lesson.subject }}</span>
+                          <button class="delete-btn" data-id="{{ lesson.id }}">Удалить</button>
+                      </li>
+                    </div>
+                  {% empty %}
+                      <li>Нет занятий</li>
+                  {% endfor %}
+              </ul>
+            </div>
         </div>
     {% endfor %}
 </div>
@@ -110,7 +139,7 @@
         </form>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </main>
   <script src="{% static 'main/js/schedule.js' %}"></script>
 {% endblock %}

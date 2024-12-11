@@ -6,45 +6,95 @@
 
 {% block body %}
 <main class="main container" id="main">
-  <div class="container">
-    <h1>Задания</h1>
+  <!-- <div class="container"> -->
+        <h1>Задачи</h1>
 
-    <!-- Кнопки для переключения между неделями -->
-    <div class="week-navigation">
-      <button id="prev-week">Предыдущая неделя</button>
-      <button id="next-week">Следующая неделя</button>
-    </div>
+        <div class="switch-week">
+          <div class="type_week">
+            <!-- Информация о чётности недели -->
+            <p id="week-parity-info">
+              {% if offset|add:1|divisibleby:2 %}
+                Чётная неделя
+              {% else %}
+                Нечётная неделя
+              {% endif %}
+            </p>
+          </div>
+
+        
+        <!-- Кнопки для переключения между неделями -->
+        <div class="week-navigation">
+            <button id="prev-week">
+              <i class="ri-arrow-left-double-fill"></i>
+            </button>
+            <button id="next-week">
+              <i class="ri-arrow-right-double-fill"></i>
+            </button>
+        </div>
+      </div>
+      
+
     
-    <!-- Информация о чётности недели -->
-    <p id="week-parity-info">
-      {% if offset|add:1|divisibleby:2 %}
-        Чётная неделя
-      {% else %}
-        Нечётная неделя
-      {% endif %}
-    </p>
-
     <!-- Кнопка для открытия модального окна "Добавить задание" -->
     <button id="add-task-btn" class="btn btn-primary">Добавить задание</button>
-
+    <!-- <div class="calendar_main">
+      <div class="day1">
+         <div class="day_header">
+            <span class="day_of_week"></span>
+            <span class="day_data">
+               <button class="plus_goal" id="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">16.40 - 18.10</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Алгоритмы и структуры данных</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">18.30 - 20.00</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Алгоритмы и структуры данных</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="section__button section__button1">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+      </div> -->
     <!-- Контейнер для расписания -->
-    <div class="week-schedule">
-    {% for day in days %}
+    <!-- <div class="calendar_main"> -->
+      <div class="week-schedule">
+      {% for day in days %}
         <div class="day-schedule">
-            <h2>{{ day.day_name }} ({{ day.date|date:"d.m.Y" }})</h2>
-            <ul class="tasks-list">
-                {% for task in tasks_by_day|get_item:day.date %}
-                    <li>
-                        <strong>{{ task.subject }}</strong>
-                        <span>{{ task.descriptions }}</span>
-                        <button class="delete-btn" data-id="{{ task.id }}">Удалить</button>
-                    </li>
-                {% empty %}
-                    <li>Нет задач</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endfor %}
+          <div class="day_header">
+            <div class="day_of_week">{{ day.day_name }}</div>
+            <div class="day_data"> {{ day.date|date:"d.m.Y" }}</div>
+          </div>
+              <ul class="tasks-list">
+                  {% for task in tasks_by_day|get_item:day.date %}
+                      <li>
+                          <strong>{{ task.subject }}</strong>
+                          <span>{{ task.descriptions }}</span>
+                          <button class="delete-btn" data-id="{{ task.id }}">Удалить</button>
+                      </li>
+                  {% empty %}
+                      <li>Нет задач</li>
+                  {% endfor %}
+              </ul>
+          </div>
+      {% endfor %}
+      </div>
     </div>
 
     <!-- Модальное окно для добавления задания -->
@@ -71,8 +121,8 @@
           <button type="submit">Добавить</button>
         </form>
       </div>
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 </main>
 <script src="{% static 'main/js/tasks.js' %}"></script>
 {% endblock %}
