@@ -4,11 +4,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('about', views.about, name = 'view_about'),
-    path('parse', views.parse_view, name ='view_parse'),
-    path('calendar', views.calendar, name = 'view_calendar'),
-    path('calendar2', views.calendar2, name = 'view_calendar2'),
-    
     path('schedule/', views.schedule_view, {'offset': 0}, name='schedule'),
     re_path(r'^schedule/(?P<offset>-?\d+)/$', views.schedule_view, name='schedule_offset'),
     path('schedule/add/', views.add_lesson, name='add_lesson'),
@@ -26,6 +21,5 @@ urlpatterns = [
     re_path(r'^deadline/(?P<offset>-?\d+)/$', views.event_view, name='event_offset'),
     path('deadline/add/', views.add_event, name='add_event'),
     path('deadline/delete/<int:task_id>/', views.delete_event, name='delete_event'),
-
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

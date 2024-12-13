@@ -7,19 +7,6 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-
-def about(request):
-    return render(request, 'main/about.html')
-
-def parse(request):
-    return render(request, 'main/parse.html')
-
-def calendar(request):
-    return render(request, 'main/calendar.html')
-
-def calendar2(request):
-    return render(request, 'main/calendar2.html')
-
 def get_start_of_week(today):
     start = today - timedelta(days=today.weekday())
     return start
@@ -369,39 +356,3 @@ def parse_time(time_str):
     start_time = time(*map(int, start_time_str.split(':')))
     end_time = time(*map(int, end_time_str.split(':')))
     return start_time, end_time
-
-def parse_view(request):
-    group_value = "317"
-    group_value1 = "12312"  # Инициализация переменной по умолчанию
-    
-    # Получаем группу пользователя
-    if request.user.is_authenticated:
-        group_value = request.user.group
-        group_value1 = str(group_value)
-    
-    url = "https://guap.ru/rasp/?g=" + group_value1
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-    }
-    
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Проверяем на ошибку HTTP
-
-        soup = BeautifulSoup(response.text, 'html.parser')
-        result_element = soup.find(class_='result')
-
-        if result_element:
-            # Удаляем элементы с классом 'legend'
-            for legend in result_element.find_all(class_='legend'):
-                legend.decompose()
-
-            # Отправляем очищенный HTML в шаблон
-            return render(request, 'main/parse.html', {'schedule_html': result_element.prettify() })
-        else:
-            return render(request, 'main/parse.html', {'schedule_html': 'Элемент с классом "result" не найден.'})
-
-    except requests.exceptions.RequestException as e:
-        # Обработка ошибок, например, при сетевых проблемах
-        return render(request, 'main/parse.html', {'schedule_html': f'Ошибка при запросе: {str(e)}'})
-    
