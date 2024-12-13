@@ -16,6 +16,7 @@ urlpatterns = [
     path('schedule/delete/<int:lesson_id>/', views.delete_lesson, name='delete_lesson'),
 
     path('schedule/parse/', views.parse_schedule, name='parse_schedule'),
+    path('clear-lessons/', views.clear_lessons, name='clear_lessons'),
 
     path('tasks/', views.task_view, {'offset': 0}, name='tasks'),
     re_path(r'^tasks/(?P<offset>-?\d+)/$', views.task_view, name='tasks_offset'),

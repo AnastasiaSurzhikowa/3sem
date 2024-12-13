@@ -43,9 +43,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
     });
-    
+
+    // Очистка всех занятий
+    const clearLessonsButton = document.getElementById('clear-lessons-btn');
+    if (clearLessonsButton) {
+        clearLessonsButton.addEventListener('click', async () => {
+            const confirmed = confirm('Вы уверены, что хотите очистить все занятия?');
+
+            if (confirmed) {
+                try {
+                    const response = await fetch('/clear-lessons/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert(data.success);
+                        window.location.reload(); // Обновляем страницу после очистки
+                    } else {
+                        alert(data.error);
+                    }
+                } catch (error) {
+                    console.error('Ошибка сети:', error);
+                    alert('Произошла ошибка при очистке.');
+                }
+            }
+        });
+    }
 
     // Открытие модального окна
     const addLessonButton = document.getElementById('add-lesson-btn');
@@ -117,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 if (response.ok) {
                     alert('Расписание успешно загружено!');
-                    console.log(data.lessons);  // Выводим информацию о загруженных парах в консоль
+                    console.log(data.lessons);
+                    window.location.reload();  // Выводим информацию о загруженных парах в консоль
                 } else {
                     alert('Ошибка при загрузке расписания.');
                     console.error(data.error);

@@ -27,8 +27,14 @@ class Lesson(models.Model):
         ('КР', 'Курсовая работа'),
     ]
 
+    # Изменение поля на CharField для поддержания "оба" значения
+    week_parity = models.CharField(
+        max_length=2,
+        choices=[('Ч', 'Чётная'), ('Н', 'Нечётная'), ('Б', 'Обе')],
+        default='Ч',
+    )  # 'Ч' для чётной, 'Н' для нечетной, 'Б' для обеих недель
+
     day = models.CharField(max_length=2, choices=DAY_CHOICES)
-    week_parity = models.BooleanField(default=True)  # True = четная неделя, False = нечетная
     subject = models.CharField(max_length=255)
     room = models.CharField(max_length=50)
     start_time = models.TimeField()

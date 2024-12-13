@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from datetime import date, timedelta, time
+from datetime import date, timedelta, time, datetime
 from django.http import JsonResponse
 from .models import Lesson, Task
 
@@ -32,36 +32,33 @@ def schedule_view(request, offset="0"):
     except ValueError:
         offset = 0
 
-    today = date.today()  # Текущая дата
+    today = date.today()
 
-    # Определяем, сколько дней нужно отнять, чтобы получить понедельник этой недели
-    start_of_week = today - timedelta(days=today.weekday())  # Понедельник текущей недели
-
-    # Если offset больше 0, смещаем на нужное количество недель
+    # Начало недели
+    start_of_week = today - timedelta(days=today.weekday())
     start_of_week += timedelta(weeks=offset)
 
-    # Номер недели и чётность недели
-    week_number = start_of_week.isocalendar()[1]  # Номер недели
-    parity = (week_number % 2 == 0)  # Четность недели
+    # Номер недели и чётность
+    week_number = start_of_week.isocalendar()[1]
+    parity = (week_number % 2 == 0)
 
-    # Список дней недели с датами
     days = [
-        {
-            'date': start_of_week + timedelta(days=i),
-            'day_name': day
-        }
+        {'date': start_of_week + timedelta(days=i), 'day_name': day}
         for i, day in enumerate(['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'])
     ]
 
-    lessons = Lesson.objects.filter(week_parity=parity, user=request.user).order_by('day', 'start_time')
+    # Уроки для текущей недели
+    if parity:
+        lessons = Lesson.objects.filter(week_parity__in=['Ч', 'Б'], user=request.user)
+    else:
+        lessons = Lesson.objects.filter(week_parity__in=['Н', 'Б'], user=request.user)
 
-    # Сортируем уроки по дням недели
     lessons_by_day = {day['day_name']: [] for day in days}
     for lesson in lessons:
         lessons_by_day[lesson.day].append(lesson)
 
     context = {
-        'days': days,  # Список дней с датами
+        'days': days,
         'lessons_by_day': lessons_by_day,
         'offset': offset,
         'parity': 'Чётная' if parity else 'Нечётная',
@@ -71,16 +68,15 @@ def schedule_view(request, offset="0"):
 
 def add_lesson(request):
     if request.method == 'POST':
-        # Получение данных из запроса
         subject = request.POST.get('subject')
         room = request.POST.get('room')
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         lesson_type = request.POST.get('lesson_type')
         day = request.POST.get('day')
-        week_parity = request.POST.get('week_parity') == 'true'  # Преобразование строки в boolean
+        week_parity = request.POST.get('week_parity')  # 'Ч', 'Н', 'Б'
 
-        # Создание урока
+        # Добавление пары
         lesson = Lesson.objects.create(
             user=request.user,
             subject=subject,
@@ -92,10 +88,8 @@ def add_lesson(request):
             week_parity=week_parity
         )
 
-        # Возврат JSON-ответа для AJAX-запросов
         return JsonResponse({'success': True, 'lesson_id': lesson.id})
 
-    # Если метод GET — можно вернуть страницу добавления или редирект
     return redirect('schedule')
 
 def delete_lesson(request, lesson_id):
@@ -179,64 +173,125 @@ def delete_task(request, task_id):
 
 #парсинг
 
-URL = "https://guap.ru/rasp/?g=319"
+from bs4 import BeautifulSoup
+import requests
+from datetime import datetime
+from django.http import JsonResponse
+from .models import Lesson
 
-def parse_schedule():
-    # Получаем HTML страницу
-    response = requests.get(URL)
+def parse_schedule(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid request method. Only POST is allowed.'}, status=405)
+
+    url = "https://guap.ru/rasp/?g=319"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        return JsonResponse({'error': f'Failed to fetch the schedule: {e}'}, status=500)
+
     soup = BeautifulSoup(response.content, 'html.parser')
-    
-    # Находим все теги h3 с днями недели
-    days = soup.find_all('h3')
-    
-    for day in days:
-        day_name = day.get_text(strip=True)
-        
-        # Пропускаем, если нет дней недели в расписании
-        if day_name not in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']:
-            continue
-        
-        # Находим все пары в этот день
-        lessons = day.find_next_siblings('div')  # Находим все div'ы, идущие после h3
-        
-        for lesson in lessons:
-            # Ищем время начала и конца пары
-            time_tag = lesson.find('h4')
-            if time_tag:
-                start_time, end_time = parse_time(time_tag.get_text(strip=True))
-            
-            # Ищем тип недели (четная/нечетная)
-            week_parity = True  # По умолчанию четная неделя
-            if lesson.find('b', class_='dn'):
-                week_parity = False
-            elif lesson.find('b', class_='up'):
-                week_parity = True
-            else:
-                week_parity = None  # Если ничего не указано, на обе недели
-            
-            # Получаем название предмета
 
-            # Получаем аудиторию
-            room_tag = lesson.find('em')
-            if room_tag:
-                room = room_tag.get_text(strip=True)
-            
-            # Ищем тип занятия
-            lesson_type_tag = lesson.find('b')
-            if lesson_type_tag:
-                lesson_type = lesson_type_tag.get_text(strip=True)
-            
-            # Сохраняем данные в модель Lesson
-            lesson_obj = Lesson(
-                day=day_name[:2],  # Сохраняем только первые две буквы дня недели
-                week_parity=week_parity,
-                subject=subject,
-                room=room,
+    # Ищем div с классом "result"
+    result_div = soup.find('div', class_='result')
+    if not result_div:
+        return JsonResponse({'error': 'No schedule data found in the result section.'}, status=404)
+
+    # Словарь для преобразования дня недели
+    day_map = {
+        "Понедельник": "ПН",
+        "Вторник": "ВТ",
+        "Среда": "СР",
+        "Четверг": "ЧТ",
+        "Пятница": "ПТ",
+        "Суббота": "СБ",
+        "Воскресенье": "ВС",
+    }
+
+    # Находим все теги h3 внутри div с классом result
+    days = result_div.find_all("h3")
+    if not days:
+        return JsonResponse({'error': 'No schedule data found on the page.'}, status=404)
+
+    # Игнорируем первый тег h3
+    if days:
+        days[0].decompose()  # Удаляем первый h3
+
+    created_count = 0
+
+    for day in days:
+        day_name = day_map.get(day.text.strip(), None)
+        if not day_name:
+            continue
+
+        lessons = day.find_next_siblings("h4")
+        for lesson in lessons:
+            # Игнорируем элементы с тегом legend
+            if lesson.find("legend"):
+                continue
+
+            time_info = lesson.text.strip()
+            try:
+                # Разделяем начало и конец времени
+                time_range = time_info.split(" (")[1].replace(")", "").split("–")
+                start_time = datetime.strptime(time_range[0].strip(), "%H:%M").time()
+                end_time = datetime.strptime(time_range[1].strip(), "%H:%M").time()
+            except Exception as e:
+                print(f"Ошибка при обработке времени: {e}")
+                continue
+
+            study_info = lesson.find_next("div", class_="study")
+            if not study_info:
+                continue
+
+            subject = study_info.find("b").next_sibling.strip().strip('–" ')
+            room = study_info.find("em").text.strip()
+            lesson_type = study_info.find("b").text.strip()
+
+            # Проверка четности недели
+            week_parity_tag = study_info.find("b", class_="dn")
+            week_parity = "Б"  # None для обычной недели
+            if week_parity_tag:
+                week_parity = "Н"  # Нечетная неделя
+            elif study_info.find("b", class_="up"):
+                week_parity = "Ч"  # Четная неделя
+
+            # Проверяем, существует ли уже такой урок
+            if not Lesson.objects.filter(
+                user=request.user,
+                day=day_name,
                 start_time=start_time,
                 end_time=end_time,
-                lesson_type=lesson_type
-            )
-            lesson_obj.save()
+            ).exists():
+                # Создаём новый урок, если его ещё нет
+                Lesson.objects.create(
+                    user=request.user,
+                    day=day_name,
+                    start_time=start_time,
+                    end_time=end_time,
+                    subject=subject,
+                    room=room,
+                    lesson_type=lesson_type,
+                    week_parity=week_parity,
+                )
+                created_count += 1
+
+    return JsonResponse({
+        'success': 'Schedule parsed successfully.',
+        'created': created_count,
+    }, status=200)
+
+
+
+
+
+def clear_lessons(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        # Очистить все записи модели Lesson для текущего пользователя
+        Lesson.objects.filter(user=request.user).delete()
+        return JsonResponse({'success': 'Все занятия успешно удалены!'})
+    
+    return JsonResponse({'error': 'Ошибка запроса или недостаточно прав.'}, status=400)
 
 def parse_time(time_str):
     # Преобразуем строку времени в объекты time

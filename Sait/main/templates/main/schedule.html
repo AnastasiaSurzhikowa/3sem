@@ -35,8 +35,8 @@
       </div>
 
     <!-- Кнопка для парсинга расписания -->
-    <!-- <button id="parse-schedule-btn" class="btn btn-primary">Парсить расписание</button> -->    
-
+    <button id="parse-schedule-btn" class="btn btn-primary">Парсить расписание</button>   
+    <button id="clear-lessons-btn" class="btn btn-warning">Очистить расписание</button>
     <!-- Кнопка для открытия модального окна "Добавить пару" -->
     <!-- <div class="add_lesson">
       <div class="hr1">
@@ -134,8 +134,9 @@
       
                 <label for="week_parity">Четность недели:</label>
                 <select class="text_input" name="week_parity" id="week_parity" required>
-                  <option value="false">Чётная</option>
-                  <option value="true">Нечётная</option>
+                    <option value="Ч">Чётная</option>
+                    <option value="Н">Нечётная</option>
+                    <option value="Б">Обе</option>
                 </select>
       
                 <!-- Кнопка для добавления пары -->
