@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .models import Lesson, Task
 
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -173,11 +174,11 @@ def delete_task(request, task_id):
 
 #парсинг
 
-from bs4 import BeautifulSoup
-import requests
+import re
 from datetime import datetime
 from django.http import JsonResponse
-from .models import Lesson
+from bs4 import BeautifulSoup
+import requests
 
 def parse_schedule(request):
     if request.method != 'POST':
@@ -192,12 +193,10 @@ def parse_schedule(request):
 
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    # Ищем div с классом "result"
     result_div = soup.find('div', class_='result')
     if not result_div:
         return JsonResponse({'error': 'No schedule data found in the result section.'}, status=404)
 
-    # Словарь для преобразования дня недели
     day_map = {
         "Понедельник": "ПН",
         "Вторник": "ВТ",
@@ -208,14 +207,14 @@ def parse_schedule(request):
         "Воскресенье": "ВС",
     }
 
-    # Находим все теги h3 внутри div с классом result
     days = result_div.find_all("h3")
     if not days:
         return JsonResponse({'error': 'No schedule data found on the page.'}, status=404)
+    if len(days) > 8:
+        return JsonResponse({'error': 'Ублюдок не скипает'}, status=404)
 
-    # Игнорируем первый тег h3
     if days:
-        days[0].decompose()  # Удаляем первый h3
+        days[0].decompose()
 
     created_count = 0
 
@@ -224,62 +223,63 @@ def parse_schedule(request):
         if not day_name:
             continue
 
-        lessons = day.find_next_siblings("h4")
-        for lesson in lessons:
-            # Игнорируем элементы с тегом legend
-            if lesson.find("legend"):
-                continue
+        # Сохраняем все элементы до следующего h3 (новый день недели)
+        current = day.find_next_sibling()
+        while current and current.name != "h3":
+            if current.name == "h4" or current.name == "div":
+                # Обрабатываем только теги <h4>
+                time_info = current.text.strip()
+                time_range = re.findall(r"(\d{1,2}:\d{2})–(\d{1,2}:\d{2})", time_info)
+                if time_range:
+                    start_time, end_time = time_range[0]
+                    start_time = datetime.strptime(start_time, "%H:%M").time()
+                    end_time = datetime.strptime(end_time, "%H:%M").time()
+                else:
+                    current = current.find_next_sibling()
+                    continue
 
-            time_info = lesson.text.strip()
-            try:
-                # Разделяем начало и конец времени
-                time_range = time_info.split(" (")[1].replace(")", "").split("–")
-                start_time = datetime.strptime(time_range[0].strip(), "%H:%M").time()
-                end_time = datetime.strptime(time_range[1].strip(), "%H:%M").time()
-            except Exception as e:
-                print(f"Ошибка при обработке времени: {e}")
-                continue
+                study_info = current.find_next("div", class_="study")
+                if not study_info:
+                    current = current.find_next_sibling()
+                    continue
 
-            study_info = lesson.find_next("div", class_="study")
-            if not study_info:
-                continue
+                week_parity = "Ч" if study_info.find("b", class_="up") else "Н" if study_info.find("b", class_="dn") else "Б"
+                if study_info.find("b").text.strip() == str("▼") or study_info.find("b").text.strip() == str("▲"):
+                    lesson_type = study_info.find("b").find_next("b").text.strip()
+                    subject = study_info.find("b").find_next("b").next_sibling.strip().strip('–" ') if study_info.find("b") else "Неизвестно"
+                else:
+                    lesson_type = study_info.find("b").text.strip() if study_info.find("b") else "Неизвестно"
+                    subject = study_info.find("b").next_sibling.strip().strip('–" ') if study_info.find("b") else "Неизвестно"
+                room = study_info.find("em").text.strip().strip('–" ') if study_info.find("em") else "Неизвестно"
 
-            subject = study_info.find("b").next_sibling.strip().strip('–" ')
-            room = study_info.find("em").text.strip()
-            lesson_type = study_info.find("b").text.strip()
-
-            # Проверка четности недели
-            week_parity_tag = study_info.find("b", class_="dn")
-            week_parity = "Б"  # None для обычной недели
-            if week_parity_tag:
-                week_parity = "Н"  # Нечетная неделя
-            elif study_info.find("b", class_="up"):
-                week_parity = "Ч"  # Четная неделя
-
-            # Проверяем, существует ли уже такой урок
-            if not Lesson.objects.filter(
-                user=request.user,
-                day=day_name,
-                start_time=start_time,
-                end_time=end_time,
-            ).exists():
-                # Создаём новый урок, если его ещё нет
-                Lesson.objects.create(
+                if not Lesson.objects.filter(
                     user=request.user,
                     day=day_name,
                     start_time=start_time,
                     end_time=end_time,
-                    subject=subject,
-                    room=room,
-                    lesson_type=lesson_type,
-                    week_parity=week_parity,
-                )
-                created_count += 1
+                    week_parity=week_parity,  # Добавляем проверку по четности недели
+                ).exists():
+                    Lesson.objects.create(
+                        user=request.user,
+                        day=day_name,
+                        start_time=start_time,
+                        end_time=end_time,
+                        subject=subject,
+                        room=room,
+                        lesson_type=lesson_type,
+                        week_parity=week_parity,
+                    )
+                    created_count += 1
+
+
+            current = current.find_next_sibling()
 
     return JsonResponse({
         'success': 'Schedule parsed successfully.',
         'created': created_count,
     }, status=200)
+
+
 
 
 
