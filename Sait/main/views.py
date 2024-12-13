@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from datetime import date, timedelta, time, datetime
 from django.http import JsonResponse
-from .models import Lesson, Task
+from .models import Lesson, Task, Event
 
 import requests
 import re
@@ -13,9 +13,6 @@ def about(request):
 
 def parse(request):
     return render(request, 'main/parse.html')
-
-def deadline(request):
-    return render(request, 'main/deadline.html')
 
 def calendar(request):
     return render(request, 'main/calendar.html')
@@ -172,13 +169,80 @@ def delete_task(request, task_id):
     Task.objects.filter(id=task_id).delete()
     return JsonResponse({'success': True})
 
-#парсинг
+#Дедлайны
 
-import re
-from datetime import datetime
-from django.http import JsonResponse
-from bs4 import BeautifulSoup
-import requests
+def event_view(request, offset="0"):
+    try:
+        offset = int(offset)
+    except ValueError:
+        offset = 0
+
+    today = date.today()  # Текущая дата
+
+    # Определяем, сколько дней нужно отнять, чтобы получить понедельник этой недели
+    start_of_week = today - timedelta(days=today.weekday())  # Понедельник текущей недели
+
+    # Если offset больше 0, смещаем на нужное количество недель
+    start_of_week += timedelta(weeks=offset)
+
+    # Номер недели и чётность недели
+    week_number = start_of_week.isocalendar()[1]  # Номер недели
+    parity = (week_number % 2 == 0)  # Четность недели
+
+    # Список дней недели с датами
+    days = [
+        {
+            'date': start_of_week + timedelta(days=i),
+            'day_name': day
+        }
+        for i, day in enumerate(['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'])
+    ]
+
+    # Получаем задания для текущей недели
+    events = Event.objects.filter(
+        user=request.user,
+        date__gte=start_of_week,
+        date__lt=start_of_week + timedelta(days=7)
+    ).order_by('date')
+
+    # Группируем задания по дате
+    events_by_day = {day['date']: [] for day in days}
+    for event in events:
+        events_by_day[event.date].append(event)
+
+    context = {
+        'days': days,  # Список дней с датами
+        'events_by_day': events_by_day,
+        'offset': offset,
+        'parity': 'Чётная' if parity else 'Нечётная',
+    }
+
+    return render(request, 'main/deadline.html', context)
+
+def add_event(request):
+    if request.method == 'POST':
+        # Получение данных из запроса
+        subject = request.POST.get('subject')
+        descriptions = request.POST.get('descriptions')
+        date = request.POST.get('date')  # Получаем только дату
+        
+        # Создание задания
+        event = Event.objects.create(
+            subject=subject,
+            descriptions=descriptions,
+            user=request.user,
+            date=date,  # Сохраняем только дату
+        )
+
+        # Возврат JSON-ответа для AJAX-запросов
+        return JsonResponse({'success': True, 'event_id': event.id})
+
+    # Если метод GET — можно вернуть страницу добавления или редирект
+    return redirect('events')
+
+def delete_event(request, event_id):
+    Event.objects.filter(id=event_id).delete()
+    return JsonResponse({'success': True})
 
 def parse_schedule(request):
     if request.method != 'POST':
@@ -340,3 +404,4 @@ def parse_view(request):
     except requests.exceptions.RequestException as e:
         # Обработка ошибок, например, при сетевых проблемах
         return render(request, 'main/parse.html', {'schedule_html': f'Ошибка при запросе: {str(e)}'})
+    

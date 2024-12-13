@@ -61,3 +61,17 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.subject} - {self.date}"
+
+class Event(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="event",
+        default=1
+    )
+    date = models.DateField(default=now)  # Указываем дату, которая будет назначаться при добавлении
+    subject = models.CharField(default="Нет названия",max_length=255)
+    descriptions = models.CharField(default="Нет описания",max_length=511)
+
+    def __str__(self):
+        return f"{self.subject} - {self.date}"

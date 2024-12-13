@@ -7,7 +7,6 @@ urlpatterns = [
     path('about', views.about, name = 'view_about'),
     path('parse', views.parse_view, name ='view_parse'),
     path('calendar', views.calendar, name = 'view_calendar'),
-    path('deadline', views.deadline, name = 'view_deadline'),
     path('calendar2', views.calendar2, name = 'view_calendar2'),
     
     path('schedule/', views.schedule_view, {'offset': 0}, name='schedule'),
@@ -22,4 +21,11 @@ urlpatterns = [
     re_path(r'^tasks/(?P<offset>-?\d+)/$', views.task_view, name='tasks_offset'),
     path('tasks/add/', views.add_task, name='add_task'),
     path('tasks/delete/<int:task_id>/', views.delete_task, name='delete_task'),
+
+    path('deadline/', views.event_view, {'offset': 0}, name='event'),
+    re_path(r'^deadline/(?P<offset>-?\d+)/$', views.event_view, name='event_offset'),
+    path('deadline/add/', views.add_event, name='add_event'),
+    path('deadline/delete/<int:task_id>/', views.delete_event, name='delete_event'),
+
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

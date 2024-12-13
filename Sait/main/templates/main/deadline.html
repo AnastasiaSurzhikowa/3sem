@@ -1,76 +1,127 @@
-{% extends 'main/layout.html'%}
-{% load static%}
+{% extends "main/layout.html" %}
+{% load custom_tags %}
+{% load static %}
 
-{% block title%}Пары{% endblock %}
+{% block title%}Дедлайны{% endblock %}
 
-{% block body%} 
+{% block body %}
 <main class="main container" id="main">
-    <div class="container_deadline">
-        <div class="left">
-          <div class="calendar">
-            <div class="month">
-              <i class="fas fa-angle-left prev"></i>
-              <div class="date">декабрь 2015</div>
-              <i class="fas fa-angle-right next"></i>
-            </div>
-            <div class="weekdays">
-              <div>Вс</div>
-              <div>Пн</div>
-              <div>Вт</div>
-              <div>Ср</div>
-              <div>Чт</div>
-              <div>Пт</div>
-              <div>Сб</div>
-            </div>
-            <div class="days"></div>
-            <div class="goto-today">
-              <div class="goto">
-                <input type="text" placeholder="мм/гггг" class="date-input" />
-                <button class="goto-btn">Далее</button>
-              </div>
-              <button class="today-btn">Сегодня</button>
-            </div>
+  <!-- <div class="container"> -->
+        <h1>Дедлайны</h1>
+
+        <div class="switch-week">
+          <div class="type_week">
+            <!-- Информация о чётности недели -->
+            <p id="week-parity-info">
+              {% if offset|add:1|divisibleby:2 %}
+                Чётная неделя
+              {% else %}
+                Нечётная неделя
+              {% endif %}
+            </p>
           </div>
+
+        
+        <!-- Кнопки для переключения между неделями -->
+        <div class="week-navigation">
+            <button id="prev-week">
+              <i class="ri-arrow-left-double-fill"></i>
+            </button>
+            <button id="next-week">
+              <i class="ri-arrow-right-double-fill"></i>
+            </button>
         </div>
-        <div class="right">
-          <div class="today-date">
-            <div class="event-day">Ср</div>
-            <div class="event-date">12 Декабрь 2022</div>
+      </div>
+      
+
+    
+    <!-- Кнопка для открытия модального окна "Добавить задание" -->
+    <button id="add-event-btn" class="btn btn-primary">Добавить задание</button>
+    <!-- <div class="calendar_main">
+      <div class="day1">
+         <div class="day_header">
+            <span class="day_of_week"></span>
+            <span class="day_data">
+               <button class="plus_goal" id="plus_goal">
+                  <i class="ri-add-circle-line"></i>
+               </button>
+            </span>
+         </div>
+         <div class="lessons">
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">16.40 - 18.10</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Алгоритмы и структуры данных</span> 
+               </div>
+               <div class="lesson">
+                  <div class="lesson_header">
+                     <span class="time_lesson">18.30 - 20.00</span>
+                     <span class="type_lesson">Л</span>
+                  </div>
+                  <span class="name_lesson">Алгоритмы и структуры данных</span> 
+               </div>
+         </div>
+         <div class="goal">
+            <hr>
+            <div class="plus_note">
+               <button class="section__button section__button1">
+                  <i class="ri-sticky-note-add-line"></i>
+               </button>
+            </div>
+         </div>
+      </div> -->
+    <!-- Контейнер для расписания -->
+    <!-- <div class="calendar_main"> -->
+      <div class="week-schedule">
+      {% for day in days %}
+        <div class="day-schedule">
+          <div class="day_header">
+            <div class="day_of_week">{{ day.day_name }}</div>
+            <div class="day_datass"> {{ day.date|date:"d.m.Y" }}</div>
           </div>
-          <div class="events"></div>
-          <div class="add-event-wrapper">
-            <div class="add-event-header">
-              <div class="title">Добавить дедлайн</div>
-              <i class="fas fa-times close"></i>
-            </div>
-            <div class="add-event-body">
-              <div class="add-event-input">
-                <input type="text" placeholder="Описание" class="event-name" />
-              </div>
-              <div class="add-event-input">
-                <input
-                  type="text"
-                  placeholder="Время начала"
-                  class="event-time-from"
-                />
-              </div>
-              <div class="add-event-input">
-                <input
-                  type="text"
-                  placeholder="Время конца"
-                  class="event-time-to"
-                />
-              </div>
-            </div>
-            <div class="add-event-footer">
-              <button class="add-event-btn">Сохранить</button>
-            </div>
+              <ul class="events-list">
+                  {% for event in events_by_day|get_item:day.date %}
+                      <li>
+                          <strong>{{ event.subject }}</strong>
+                          <span>{{ event.descriptions }}</span>
+                          <button class="delete-btn" data-id="{{ events.id }}">Удалить</button>
+                      </li>
+                  {% empty %}
+                      <li>Нет дедлайнов</li>
+                  {% endfor %}
+              </ul>
           </div>
-        </div>
-        <button class="add-event">
-          <i class="ri-add-fill"></i>
-        </button>
-      </div>  
-      <script src="script.js"></script>
+      {% endfor %}
+      </div>
+    </div>
+
+    <!-- Модальное окно для добавления задания -->
+    <div id="add-event-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2 class="h2_events">Добавить Задание</h2>
+        <form id="add-event-form" method="POST" action="/deadline/add/">
+          {% csrf_token %}
+          
+          <!-- Название задания -->
+          <label for="subject">Название дедлайна:</label>
+          <input class="text_input" type="text" id="subject" name="subject" required>
+
+          <!-- Описание задания -->
+          <label for="descriptions">Описание:</label>
+          <input class="text_input" type="text" id="descriptions" name="descriptions" required>
+
+          <!-- Дата задания -->
+          <label for="date">Дата:</label>
+          <input class="text_input" type="date" name="date" id="date" required>
+
+          <!-- Кнопка для добавления задания -->
+          <button class="btn-section" type="submit">Добавить</button>
+        </form>
+      </div>
+
 </main>
+<script src="{% static 'main/js/event.js' %}"></script>
 {% endblock %}
