@@ -797,9 +797,9 @@ fieldset {
   border-radius: 50%;
 }
 
-.proff {
+/* .proff {
   margin-bottom: 16px;
-}
+} */
 
 .study{
   background-color: var(--lesson-color);
@@ -1482,4 +1482,140 @@ h4 {
   .right-pd {
     padding-left: 340px;
   }
+}
+
+/* ================input FORMS DJ================ */
+/* Основные стили для формы */
+
+/* Стили для метки */
+.proff {
+  font-size: 14px; /* Размер шрифта */
+  font-weight: bold; /* Жирный шрифт */
+  color: #333; /* Темный цвет текста */
+  margin-bottom: 5px; /* Отступ снизу */
+  display: block; /* Блочный элемент для размещения на новой строке */
+  text-align: left; /* Выравнивание по левому краю */
+}
+
+/* Стили для поля ввода */
+input {
+  width: 100%; /* Ширина поля 100% */
+  padding: 12px 15px; /* Паддинги для улучшения внешнего вида */
+  font-size: 16px; /* Размер шрифта */
+  border-radius: 15px; /* Скругленные углы */
+  border: 1px solid #ccc; /* Светлая граница */
+  background-color: #fff; /* Белый фон */
+  transition: border-color 0.3s ease; /* Плавный переход для изменения цвета границы */
+}
+
+/* Стили при фокусе на поле */
+input:focus {
+  outline: none; /* Убираем стандартную обводку */
+  border-color: #4caf50; /* Зеленая граница при фокусе */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкое свечение при фокусе */
+}
+
+/* Добавление иконки в качестве фона (если раскомментировать код с изображением) */
+.form-group span {
+  display: inline-block;
+  margin-right: 10px; /* Отступ справа от иконки */
+  vertical-align: middle; /* Выравнивание по центру */
+}
+
+/* Стилизация текста ошибки (если в форме есть ошибки) */
+.form-group .error {
+  color: red; /* Красный цвет для ошибок */
+  font-size: 12px; /* Размер шрифта для ошибок */
+  margin-top: 5px; /* Отступ сверху */
+}
+
+/* Стили для поля ввода (для поля типа select, если группа - это выпадающий список) */
+select {
+  width: 100%; /* Ширина поля 100% */
+  padding: 12px 15px; /* Паддинги для улучшения внешнего вида */
+  font-size: 16px; /* Размер шрифта */
+  border-radius: 15px; /* Скругленные углы */
+  border: 1px solid #ccc; /* Светлая граница */
+  background-color: #fff; /* Белый фон */
+  transition: border-color 0.3s ease; /* Плавный переход для изменения цвета границы */
+}
+
+/* Стили при фокусе на поле */
+select:focus {
+  outline: none; /* Убираем стандартную обводку */
+  border-color: #4caf50; /* Зеленая граница при фокусе */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкое свечение при фокусе */
+}
+
+/* Стили для поля загрузки файла */
+input[type="file"] {
+  width: 100%; /* Ширина поля 100% */
+  padding: 10px 15px; /* Паддинги для улучшения внешнего вида */
+  font-size: 16px; /* Размер шрифта */
+  border-radius: 5px; /* Скругленные углы */
+  border: 1px solid #ccc; /* Светлая граница */
+  background-color: #fff; /* Белый фон */
+  cursor: pointer; /* Курсор в виде руки */
+  transition: border-color 0.3s ease; /* Плавный переход для изменения цвета границы */
+  margin-top: 8px; /* Отступ сверху */
+}
+
+/* Изменения при фокусе на поле загрузки */
+input[type="file"]:focus {
+  outline: none; /* Убираем стандартную обводку */
+  border-color: #4caf50; /* Зеленая граница при фокусе */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкое свечение при фокусе */
+}
+
+/* Стиль для кнопки загрузки */
+input[type="file"]::file-selector-button {
+  background-color: var(--div-color); /* Зеленый фон кнопки */
+  color: white; /* Белый текст на кнопке */
+  padding: 10px 15px; /* Отступы для кнопки */
+  border-radius: 15px; /* Скругленные углы */
+  font-size: 16px; /* Размер шрифта на кнопке */
+  cursor: pointer; /* Курсор в виде руки */
+  border: none; /* Убираем стандартную границу кнопки */
+  transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+}
+
+/* Изменения при наведении на кнопку */
+input[type="file"]::file-selector-button:hover {
+  background-color: var(--btn-color); /* Темно-зеленый цвет при наведении */
+}
+
+/* Стиль для изображения, если оно загружено */
+.form-group .uploaded-image {
+  margin-top: 10px; /* Отступ сверху */
+  max-width: 100%; /* Максимальная ширина изображения */
+  border-radius: 5px; /* Скругленные углы */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для изображения */
+}
+
+/* Стилизация текста ошибки (если в форме есть ошибки) */
+.form-group .error {
+  color: red; /* Красный цвет для ошибок */
+  font-size: 12px; /* Размер шрифта для ошибок */
+  margin-top: 5px; /* Отступ сверху */
+}
+
+/* ===================== кнопки для добавления================*/
+.btn-primary {
+  position: fixed;
+  bottom: 40px; 
+  right: 50px;
+}
+.btn-primary {
+  background-color: var(--div-color);
+  border: 2px solid white;
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  border-radius: 15px;
+  margin-top: 30px;
+  box-shadow: 0 2px 24px var(--shadow-color);
 }
