@@ -183,8 +183,18 @@ import requests
 def parse_schedule(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method. Only POST is allowed.'}, status=405)
+    
+    if request.method == 'POST' and request.user.is_authenticated:
+        # Очистить все записи модели Lesson для текущего пользователя
+        Lesson.objects.filter(user=request.user, is_parse =True).delete()
 
-    url = "https://guap.ru/rasp/?g=319"
+    group_value = "31745345234" 
+    # Получаем группу пользователя
+    if request.user.is_authenticated:
+        group_value = str(request.user.group)
+    
+    url = "https://guap.ru/rasp/?g=" + group_value
+
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -214,7 +224,8 @@ def parse_schedule(request):
         return JsonResponse({'error': 'Ублюдок не скипает'}, status=404)
 
     if days:
-        days[0].decompose()
+        if str(days[0]) == (str("вне сетки расписания (—)")):
+            days[0].decompose()
 
     created_count = 0
 
@@ -266,6 +277,7 @@ def parse_schedule(request):
                         end_time=end_time,
                         subject=subject,
                         room=room,
+                        is_parse = True,
                         lesson_type=lesson_type,
                         week_parity=week_parity,
                     )
@@ -278,12 +290,6 @@ def parse_schedule(request):
         'success': 'Schedule parsed successfully.',
         'created': created_count,
     }, status=200)
-
-
-
-
-
-
 
 def clear_lessons(request):
     if request.method == 'POST' and request.user.is_authenticated:

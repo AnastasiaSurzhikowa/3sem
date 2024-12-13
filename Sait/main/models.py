@@ -40,6 +40,7 @@ class Lesson(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     lesson_type = models.CharField(max_length=2, choices=TYPE_CHOICES)
+    is_parse = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['start_time']
