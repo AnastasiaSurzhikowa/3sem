@@ -12,6 +12,7 @@
     </span>
     <strong>Добро пожаловать!</strong>
     <span>Войдите в ваш аккаунт</span>
+    <div class="empty_div"></div>
 
     <form action="" method="post" class="login-form">
         {% csrf_token %}
@@ -33,13 +34,13 @@
                     {{ form.password }}
                 </div>  
 
-                <div class="form-row-bottom">
+                <!-- <div class="form-row-bottom">
                     <div class="form-check">
                         <input class="custom-checkbox" type="checkbox" id="remenber" name="remenber" value="remenber">
                         <label for="remenber"> Запомнить меня</label>
                     </div>
                     <a href="#url" class="forgot">Забыли пароль?</a>
-                </div>
+                </div> -->
                 
                 <div class="form-row-button-login">
                     <button class="btn-btn-login">Войти <span
