@@ -271,8 +271,6 @@ def parse_schedule(request):
     days = result_div.find_all("h3")
     if not days:
         return JsonResponse({'error': 'No schedule data found on the page.'}, status=404)
-    if len(days) > 8:
-        return JsonResponse({'error': 'Ублюдок не скипает'}, status=404)
 
     if days:
         if str(days[0]) == (str("вне сетки расписания (—)")):
@@ -356,10 +354,3 @@ def clear_lessons(request):
         return JsonResponse({'success': 'Все занятия успешно удалены!'})
     
     return JsonResponse({'error': 'Ошибка запроса или недостаточно прав.'}, status=400)
-
-def parse_time(time_str):
-    # Преобразуем строку времени в объекты time
-    start_time_str, end_time_str = time_str.split(' - ')
-    start_time = time(*map(int, start_time_str.split(':')))
-    end_time = time(*map(int, end_time_str.split(':')))
-    return start_time, end_time

@@ -20,6 +20,6 @@ urlpatterns = [
     path('deadline/', views.event_view, {'offset': 0}, name='event'),
     re_path(r'^deadline/(?P<offset>-?\d+)/$', views.event_view, name='event_offset'),
     path('deadline/add/', views.add_event, name='add_event'),
-    path('deadline/delete/<int:task_id>/', views.delete_event, name='delete_event'),
+    path('deadline/delete/<int:event_id>/', views.delete_event, name='delete_event'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
