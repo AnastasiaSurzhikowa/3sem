@@ -18,15 +18,15 @@ const showSidebar = (toggleId, sidebarId, headerId, mainId) =>{
 }
 showSidebar('header-toggle','sidebar', 'header', 'main')
 
-/*=============== LINK ACTIVE ===============*/
-const sidebarLink = document.querySelectorAll('.sidebar__list a')
+// /*=============== LINK ACTIVE ===============*/
+// const sidebarLink = document.querySelectorAll('.sidebar__list a')
 
-function linkColor(){
-    sidebarLink.forEach(l => l.classList.remove('active-link'))
-    this.classList.add('active-link')
-}
+// function linkColor(){
+//     sidebarLink.forEach(l => l.classList.remove('active-link'))
+//     this.classList.add('active-link')
+// }
 
-sidebarLink.forEach(l => l.addEventListener('click', linkColor))
+// sidebarLink.forEach(l => l.addEventListener('click', linkColor))
 
 /*=============== DARK LIGHT THEME ===============*/ 
 const themeButton = document.getElementById('theme-button')

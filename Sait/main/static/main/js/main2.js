@@ -2,7 +2,7 @@
   // ----------------------------days of week------------
   // Функция для обновления дней недели
   function updateWeekDates(weekStartDate) {
-    const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    const daysOfWeek = ['ПН', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     const dayElements = document.querySelectorAll('.day_of_week');
     const dayElementsDay = document.querySelectorAll('.day_data');
   

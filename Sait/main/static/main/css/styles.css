@@ -16,6 +16,8 @@
   --lesson-color: hsl(234, 100%, 96%);
   --lsn-color: hsl(227, 8%, 23%);
   --btn-color: rgb(135, 117, 225, 0.8);
+  --button-border-color: hsl(0, 0%, 100%);
+  --button-inside-color: hsl(234, 98%, 78%);
 
   /*========== Font and typography ==========*/
   /*.5rem = 8px | 1rem = 16px ...*/
@@ -72,14 +74,16 @@ button {
 
 /*=============== VARIABLES DARK THEME ===============*/
 body.dark-theme {
-  --first-color: hsl(234, 98%, 78%);;
+  --first-color: hsl(234, 98%, 78%);
   --div-color: hsl(234, 98%, 78%);
   --title-color: hsl(228, 18%, 96%);
   --text-color: hsl(228, 12%, 61%);
   --body-color: hsl(228, 24%, 16%);
   --shadow-color: hsla(228, 80%, 4%, .3);
   --lesson-color: hsl(228, 24%, 16%);
-  --lsn-color: hsl(228, 18%, 96%);;
+  --lsn-color: hsl(228, 18%, 96%);
+  --button-border-color: hsl(234, 98%, 78%);
+  --button-inside-color: hsl(228, 24%, 16%);
 }
 
 /*========== 
@@ -291,18 +295,18 @@ body.dark-theme {
 }
 
 /* Active link */
-.active-link {
+/* .active-link {
   color: var(--first-color);
-}
+} */
 
-.active-link::after {
+/* .active-link::after {
   content: "";
   position: absolute;
   left: 0;
   width: 3px;
   height: 20px;
   background-color: var(--first-color);
-}
+} */
 
 /*=============== MAIN ===============*/
 .testing {
@@ -333,6 +337,7 @@ body.dark-theme {
   column-gap: 20px;
   grid-auto-rows: minmax(1fr);
   grid-auto-columns: minmax(1fr);
+  margin-top: 15px;
 }
 
 .day-schedule {
@@ -667,6 +672,13 @@ hr {
 
 
 /* ================== MODAL TASKS=====================*/
+.delete-btn {
+  color: var(--first-color);
+}
+
+.events-list {
+  list-style: none;
+}
 
 .tasks_info {
   margin-bottom: 1rem;
@@ -796,10 +808,6 @@ fieldset {
 .photo_profile_img {
   border-radius: 50%;
 }
-
-/* .proff {
-  margin-bottom: 16px;
-} */
 
 .study{
   background-color: var(--lesson-color);
@@ -1485,13 +1493,16 @@ h4 {
 }
 
 /* ================input FORMS DJ================ */
-/* Основные стили для формы */
+.safe {
+  color: var(--text-color);
+}
 
 /* Стили для метки */
 .proff {
   font-size: 14px; /* Размер шрифта */
-  font-weight: bold; /* Жирный шрифт */
-  color: #333; /* Темный цвет текста */
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  color: var(--text-color); /* Темный цвет текста */
   margin-bottom: 5px; /* Отступ снизу */
   display: block; /* Блочный элемент для размещения на новой строке */
   text-align: left; /* Выравнивание по левому краю */
@@ -1504,15 +1515,15 @@ input {
   font-size: 16px; /* Размер шрифта */
   border-radius: 15px; /* Скругленные углы */
   border: 1px solid #ccc; /* Светлая граница */
-  background-color: #fff; /* Белый фон */
+  background-color: var(--body-color); /* Белый фон */
   transition: border-color 0.3s ease; /* Плавный переход для изменения цвета границы */
 }
 
 /* Стили при фокусе на поле */
 input:focus {
   outline: none; /* Убираем стандартную обводку */
-  border-color: #4caf50; /* Зеленая граница при фокусе */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкое свечение при фокусе */
+  border-color: var(--first-color); /* Зеленая граница при фокусе */
+  box-shadow: 0 0 5px var(var(--first-color)); /* Легкое свечение при фокусе */
 }
 
 /* Добавление иконки в качестве фона (если раскомментировать код с изображением) */
@@ -1536,15 +1547,15 @@ select {
   font-size: 16px; /* Размер шрифта */
   border-radius: 15px; /* Скругленные углы */
   border: 1px solid #ccc; /* Светлая граница */
-  background-color: #fff; /* Белый фон */
+  background-color: var(--body-color); /* Белый фон */
   transition: border-color 0.3s ease; /* Плавный переход для изменения цвета границы */
 }
 
 /* Стили при фокусе на поле */
 select:focus {
   outline: none; /* Убираем стандартную обводку */
-  border-color: #4caf50; /* Зеленая граница при фокусе */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкое свечение при фокусе */
+  border-color: var(--first-color); /* Зеленая граница при фокусе */
+  box-shadow: 0 0 5px var(--lesson-color); /* Легкое свечение при фокусе */
 }
 
 /* Стили для поля загрузки файла */
@@ -1554,17 +1565,21 @@ input[type="file"] {
   font-size: 16px; /* Размер шрифта */
   border-radius: 5px; /* Скругленные углы */
   border: 1px solid #ccc; /* Светлая граница */
-  background-color: #fff; /* Белый фон */
+  background-color: var(--body-color); /* Белый фон */
   cursor: pointer; /* Курсор в виде руки */
   transition: border-color 0.3s ease; /* Плавный переход для изменения цвета границы */
   margin-top: 8px; /* Отступ сверху */
 }
 
+input[type="submit"] {
+  color: var(--text-color);
+}
+
 /* Изменения при фокусе на поле загрузки */
 input[type="file"]:focus {
   outline: none; /* Убираем стандартную обводку */
-  border-color: #4caf50; /* Зеленая граница при фокусе */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкое свечение при фокусе */
+  border-color: var(--first-color); /* Зеленая граница при фокусе */
+  box-shadow: 0 0 5px var(var(--first-color)); /* Легкое свечение при фокусе */
 }
 
 /* Стиль для кнопки загрузки */
@@ -1602,12 +1617,10 @@ input[type="file"]::file-selector-button:hover {
 /* ===================== кнопки для добавления================*/
 .btn-primary {
   position: fixed;
-  bottom: 40px; 
-  right: 50px;
-}
-.btn-primary {
-  background-color: var(--div-color);
-  border: 2px solid white;
+  bottom: 130px; 
+  right: 24px;
+  background-color: var(--button-inside-color);
+  border: 1px solid var(--button-border-color);
   color: rgb(255, 255, 255);
   font-weight: 700;
   padding: 10px 20px;
@@ -1618,4 +1631,48 @@ input[type="file"]::file-selector-button:hover {
   border-radius: 15px;
   margin-top: 30px;
   box-shadow: 0 2px 24px var(--shadow-color);
+}
+
+.btn-import {
+  position: fixed;
+  bottom: 75px; 
+  right: 24px;
+  background-color: var(--button-inside-color);
+  border: 1px solid var(--button-border-color);
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  border-radius: 15px;
+  margin-top: 30px;
+  box-shadow: 0 2px 24px var(--shadow-color);
+}
+
+.btn-delete {
+  position: fixed;
+  bottom: 20px; 
+  right: 24px;
+  background-color: var(--button-inside-color);
+  border: 1px solid var(--button-border-color);
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  border-radius: 15px;
+  margin-top: 30px;
+  box-shadow: 0 2px 24px var(--shadow-color);
+}
+
+.btn-primary.task{
+  bottom: 20px; 
+}
+
+.btn-primary.deadline {
+  bottom: 20px; 
 }

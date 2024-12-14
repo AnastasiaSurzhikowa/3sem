@@ -12,13 +12,13 @@
         <div class="switch-week">
           <div class="type_week">
             <!-- Информация о чётности недели -->
-            <p id="week-parity-info">
+            <h2 id="week-parity-info">
               {% if offset|add:1|divisibleby:2 %}
                 Чётная неделя
               {% else %}
                 Нечётная неделя
               {% endif %}
-            </p>
+            </h2>
           </div>
 
         
@@ -36,7 +36,7 @@
 
     
     <!-- Кнопка для открытия модального окна "Добавить задание" -->
-    <button id="add-event-btn" class="btn btn-primary">Добавить задание</button>
+    <button id="add-event-btn" class="btn-primary deadline">Добавить дедлайн</button>
     <!-- <div class="calendar_main">
       <div class="day1">
          <div class="day_header">
