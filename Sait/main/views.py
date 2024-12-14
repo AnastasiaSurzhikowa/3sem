@@ -288,8 +288,8 @@ def parse_schedule(request):
         # Сохраняем все элементы до следующего h3 (новый день недели)
         current = day.find_next_sibling()
         while current and current.name != "h3":
-            if current.name == "h4" or current.name == "div":
-                # Обрабатываем только теги <h4>
+            if current.name == "h4":
+                # Извлекаем информацию о времени
                 time_info = current.text.strip()
                 time_range = re.findall(r"(\d{1,2}:\d{2})–(\d{1,2}:\d{2})", time_info)
                 if time_range:
@@ -300,40 +300,47 @@ def parse_schedule(request):
                     current = current.find_next_sibling()
                     continue
 
-                study_info = current.find_next("div", class_="study")
-                if not study_info:
-                    current = current.find_next_sibling()
-                    continue
+                # Обрабатываем все теги <div class="study">, которые следуют за <h4>
+                study_element = current.find_next_sibling()
+                while study_element and study_element.name == "div" and "study" in study_element.get("class", []):
+                    study_info = study_element
 
-                week_parity = "Ч" if study_info.find("b", class_="up") else "Н" if study_info.find("b", class_="dn") else "Б"
-                if study_info.find("b").text.strip() == str("▼") or study_info.find("b").text.strip() == str("▲"):
-                    lesson_type = study_info.find("b").find_next("b").text.strip()
-                    subject = study_info.find("b").find_next("b").next_sibling.strip().strip('–" ') if study_info.find("b") else "Неизвестно"
-                else:
-                    lesson_type = study_info.find("b").text.strip() if study_info.find("b") else "Неизвестно"
-                    subject = study_info.find("b").next_sibling.strip().strip('–" ') if study_info.find("b") else "Неизвестно"
-                room = study_info.find("em").text.strip().strip('–" ') if study_info.find("em") else "Неизвестно"
+                    # Извлекаем данные из study_info
+                    week_parity = (
+                        "Ч" if study_info.find("b", class_="up") else
+                        "Н" if study_info.find("b", class_="dn") else
+                        "Б"
+                    )
+                    if study_info.find("b").text.strip() in ["▼", "▲"]:
+                        lesson_type = study_info.find("b").find_next("b").text.strip()
+                        subject = study_info.find("b").find_next("b").next_sibling.strip().strip('–" ') if study_info.find("b") else "Неизвестно"
+                    else:
+                        lesson_type = study_info.find("b").text.strip() if study_info.find("b") else "Неизвестно"
+                        subject = study_info.find("b").next_sibling.strip().strip('–" ') if study_info.find("b") else "Неизвестно"
+                    room = study_info.find("em").text.strip().strip('–" ') if study_info.find("em") else "Неизвестно"
 
-                if not Lesson.objects.filter(
-                    user=request.user,
-                    day=day_name,
-                    start_time=start_time,
-                    end_time=end_time,
-                    week_parity=week_parity,  # Добавляем проверку по четности недели
-                ).exists():
-                    Lesson.objects.create(
+                    # Проверяем существование записи перед созданием
+                    if not Lesson.objects.filter(
                         user=request.user,
                         day=day_name,
                         start_time=start_time,
                         end_time=end_time,
-                        subject=subject,
-                        room=room,
-                        is_parse = True,
-                        lesson_type=lesson_type,
                         week_parity=week_parity,
-                    )
-                    created_count += 1
+                    ).exists():
+                        Lesson.objects.create(
+                            user=request.user,
+                            day=day_name,
+                            start_time=start_time,
+                            end_time=end_time,
+                            subject=subject,
+                            room=room,
+                            is_parse=True,
+                            lesson_type=lesson_type,
+                            week_parity=week_parity,
+                        )
+                        created_count += 1
 
+                    study_element = study_element.find_next_sibling()  # Переход к следующему элементу
 
             current = current.find_next_sibling()
 
