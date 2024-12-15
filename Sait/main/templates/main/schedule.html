@@ -6,9 +6,6 @@
 
 {% block body %}
 <main class="main container" id="main">
-  <!-- <div class="container"> -->
-    <!-- <div class="head-week">
-      <h1>Расписание</h1> -->
 
         <div class="switch-week">
           <div class="type_week">
@@ -33,19 +30,6 @@
             </button>
         </div>
       </div>
-
-    <!-- Кнопка для парсинга расписания -->
-    
-    <!-- Кнопка для открытия модального окна "Добавить пару" -->
-    <!-- <div class="add_lesson">
-      <div class="hr1">
-        <hr>
-      </div> -->
-      
-     <!--  <div class="hr2">
-        <hr>
-      </div>
-    </div> -->
 
     <!-- Контейнер для расписания -->
     <div class="week-schedule">
@@ -133,8 +117,8 @@
       
                 <label for="week_parity">Четность недели:</label>
                 <select class="text_input" name="week_parity" id="week_parity" required>
-                    <option value="Ч">Чётная</option>
-                    <option value="Н">Нечётная</option>
+                    <option value="Н">Чётная</option>
+                    <option value="Ч">Нечётная</option>
                     <option value="Б">Обе</option>
                 </select>
       
@@ -206,7 +190,7 @@
         </form>
       </div>
     </div>
-  <!-- </div> -->
+
   <button id="add-lesson-btn" class="btn-primary">Добавить пару</button>
   <button id="parse-schedule-btn" class="btn-import">Парсить расписание</button>
   <button id="clear-lessons-btn" class="btn-delete">Очистить расписание</button>
